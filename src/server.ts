@@ -11,6 +11,7 @@ import { errorHandler } from './middlewares/errorHandler';
 import { requestLogger, errorLogger } from './middlewares/logging';
 
 const app = express();
+
 const limiter = rateLimit(rateLimitConfig);
 
 // Middleware
