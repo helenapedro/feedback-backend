@@ -4,6 +4,9 @@ import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import { rateLimitConfig } from './config';
+import authRoutes from './routes/authRoutes';
+import resumeRoutes from './routes/resumeRoutes';
+import commentRoutes from './routes/commentRoutes';
 import { errorHandler } from './middlewares/errorHandler';
 import { requestLogger, errorLogger } from './middlewares/logging';
 
@@ -20,6 +23,10 @@ app.use(errorLogger);
 
 app.use(limiter);
 
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/resumes', resumeRoutes);
+app.use('/api/comments', commentRoutes);
 
 // Error Handling
 app.use(errorHandler);
