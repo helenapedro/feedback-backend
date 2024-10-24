@@ -25,7 +25,17 @@ const uploadToS3 = async (file: Express.Multer.File) => {
   const ext = path.extname(file.originalname);
   const formattedDate = formatDate(new Date());
   const uniqueId = uuidv4();
-  const fileName = `resume_${formattedDate}_${uniqueId}${ext}`; 
+
+  let folderName = '';
+  if (ext === '.pdf') {
+    folderName = 'pdf';
+  } else if (['.jpg', '.jpeg', '.png', '.gif'].includes(ext)) {
+    folderName = 'image';
+  } else {
+    throw new Error('Unsupported file type');
+  }
+
+  const fileName = `${folderName}/resume_${formattedDate}_${uniqueId}${ext}`; 
   
   const uploadParams = {
     Bucket: BUCKET_NAME,
@@ -41,7 +51,7 @@ const uploadToS3 = async (file: Express.Multer.File) => {
   });
 
   const result = await upload.done();
-  return `https://${BUCKET_NAME}.s3.amazonaws.com/${result.Key}`;
+  return `https://${BUCKET_NAME}.s3.amazonaws.com/${folderName}/${result.Key}`;
 };
 
 export { upload, uploadToS3 };
