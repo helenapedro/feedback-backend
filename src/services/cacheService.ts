@@ -1,9 +1,9 @@
 import NodeCache from 'node-cache';
 
-const cache = new NodeCache({ stdTTL: 100, checkperiod: 120 }); // TTL of 100 seconds
+const cache = new NodeCache({ stdTTL: 100, checkperiod: 120 }); 
 
-export const setCache = (key: string, value: any) => {
-  cache.set(key, value);
+export const setCache = (key: string, value: any,  ttl: number = 100) => {
+  cache.set(key, value, ttl);
 };
 
 export const getCache = (key: string) => {
