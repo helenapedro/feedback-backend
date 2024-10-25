@@ -1,5 +1,4 @@
 import connectDB from './helpers/mongoconn';
-import s3 from './helpers/awsConfig';
 import app from './server';
 import * as dotenv from 'dotenv';
 import logger from './helpers/logger';
