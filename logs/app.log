@@ -69,3 +69,9 @@
 2024-10-25T19:15:51.074Z [info]: GET /api/resumes 200 - 47ms
 2024-10-25T19:16:41.517Z [info]: GET /resumes?page=1&limit=5 404 - 2ms
 2024-10-25T19:16:53.457Z [info]: GET /api/resumes?page=1&limit=5 200 - 14ms
+2024-10-25T19:25:55.570Z [info]: Server running on port 5000
+2024-10-25T19:25:55.602Z [info]: MongoDB Connected: localhost
+2024-10-25T19:25:58.892Z [info]: GET /api/resumes 200 - 39ms
+2024-10-25T19:27:33.232Z [info]: GET /api/resumes/671bba5f4cec170def84dea5 401 - 1ms
+2024-10-25T19:28:02.118Z [info]: GET /api/resumes/671bba5f4cec170def84dea5 200 - 12ms
+2024-10-25T19:28:16.399Z [info]: GET /api/resumes/671bba5f4cec170def84dea5 200 - 7ms
