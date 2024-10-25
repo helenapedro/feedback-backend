@@ -1,4 +1,4 @@
-import { S3Client, ObjectCannedACL } from '@aws-sdk/client-s3';
+import s3 from '../helpers/awsConfig';
 import { Upload } from '@aws-sdk/lib-storage';
 import multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
@@ -6,11 +6,6 @@ import path from 'path';
 import logger from '../helpers/logger';
 
 const BUCKET_NAME = "feedback-fs";
-const REGION_NAME = "us-east-2";
-
-const s3 = new S3Client({
-  region: REGION_NAME, 
-});
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -27,17 +22,9 @@ const uploadToS3 = async (file: Express.Multer.File) => {
   const formattedDate = formatDate(new Date());
   const uniqueId = uuidv4();
 
-  let folderName: string;
-  if (['.pdf', '.docx'].includes(ext)) {
-    folderName = 'pdf';
-  } else if (['.jpg', '.jpeg', '.png'].includes(ext)) {
-    folderName = 'image';
-  } else {
-    throw new Error('Unsupported file type');
-  }
-
+  const folderName = ['.pdf', '.docx'].includes(ext) ? 'pdf' : 'image';
   const fileName = `${folderName}/resume_${formattedDate}_${uniqueId}${ext}`; 
-  
+
   const uploadParams = {
     Bucket: BUCKET_NAME,
     Key: fileName,
