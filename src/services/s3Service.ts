@@ -8,7 +8,7 @@ const BUCKET_NAME = "feedback-fs";
 const REGION_NAME = "us-east-2";
 
 const s3 = new S3Client({
-  region: REGION_NAME,
+  region: REGION_NAME, 
 });
 
 const storage = multer.memoryStorage();
@@ -42,7 +42,6 @@ const uploadToS3 = async (file: Express.Multer.File) => {
     Key: fileName,
     Body: file.buffer,
     ContentType: file.mimetype,
-    ACL: 'public-read' as ObjectCannedACL,
   };
 
   const upload = new Upload({
@@ -51,7 +50,7 @@ const uploadToS3 = async (file: Express.Multer.File) => {
   });
 
   const result = await upload.done();
-  return `https://${BUCKET_NAME}.s3.amazonaws.com/${folderName}/${result.Key}`;
+  return `https://${BUCKET_NAME}.s3.amazonaws.com/${result.Key}`;
 };
 
 export { upload, uploadToS3 };
