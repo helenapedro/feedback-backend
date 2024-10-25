@@ -18,7 +18,7 @@ const ResumeSchema: Schema = new Schema(
     format: { 
       type: String, 
       required: true,
-      enum: ['pdf', 'docx', 'txt'], 
+      enum: ['pdf', 'docx', 'jpg', 'jpeg', 'png'], 
     },
     url: { 
       type: String, 
@@ -29,5 +29,6 @@ const ResumeSchema: Schema = new Schema(
 );
 
 ResumeSchema.index({ posterId: 1 });
+ResumeSchema.index({ createdAt: -1 }); 
 
 export default mongoose.model<IResume>('Resume', ResumeSchema);

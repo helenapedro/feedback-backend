@@ -3,6 +3,7 @@ import { Upload } from '@aws-sdk/lib-storage';
 import multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
+import logger from '../helpers/logger';
 
 const BUCKET_NAME = "feedback-fs";
 const REGION_NAME = "us-east-2";
@@ -26,10 +27,10 @@ const uploadToS3 = async (file: Express.Multer.File) => {
   const formattedDate = formatDate(new Date());
   const uniqueId = uuidv4();
 
-  let folderName = '';
-  if (ext === '.pdf') {
+  let folderName: string;
+  if (['.pdf', '.docx'].includes(ext)) {
     folderName = 'pdf';
-  } else if (['.jpg', '.jpeg', '.png', '.gif'].includes(ext)) {
+  } else if (['.jpg', '.jpeg', '.png'].includes(ext)) {
     folderName = 'image';
   } else {
     throw new Error('Unsupported file type');
@@ -44,13 +45,20 @@ const uploadToS3 = async (file: Express.Multer.File) => {
     ContentType: file.mimetype,
   };
 
-  const upload = new Upload({
-    client: s3,
-    params: uploadParams,
-  });
+  try {
+    const upload = new Upload({
+      client: s3,
+      params: uploadParams,
+    });
 
-  const result = await upload.done();
-  return `https://${BUCKET_NAME}.s3.amazonaws.com/${result.Key}`;
+    const result = await upload.done();
+
+    return `https://${BUCKET_NAME}.s3.amazonaws.com/${result.Key}`;
+
+  } catch (error) {
+    logger.error("Error uploading file to S3:", error);
+    throw new Error('Upload to S3 failed');
+  }
 };
 
 export { upload, uploadToS3 };
