@@ -11,12 +11,33 @@ export interface IUser extends Document {
 
 const UserSchema: Schema = new Schema(
   {
-    username: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true, match: /.+\@.+\..+/ },
-    password: { type: String, required: true },
-    isAdmin: { type: Boolean, default: false }, 
+    username: { 
+      type: String, 
+      required: true, 
+      unique: true 
+    },
+    email: { 
+      type: String, 
+      required: true, 
+      unique: true, 
+      validate: {
+        validator: (email: string) => /\S+@\S+\.\S+/.test(email),
+        message: 'Email is not valid.',
+
+      },
+    },
+    password: { 
+      type: String, 
+      required: true 
+    },
+    isAdmin: { 
+      type: Boolean, 
+      default: false 
+    }, 
   },
   { timestamps: true } 
 );
+
+UserSchema.index({ email: 1 });
 
 export default mongoose.model<IUser>('User', UserSchema);

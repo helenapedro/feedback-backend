@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { getCache, setCache, clearCache } from '../services/cacheService';
 import Comment from '../models/Comment';
 import Resume from '../models/Resume';
+import logger from '../helpers/logger';
 
 export const addComment = async (req: AuthRequest, res: Response): Promise<void> => {
   const { resumeId, content } = req.body;
@@ -30,6 +31,7 @@ export const addComment = async (req: AuthRequest, res: Response): Promise<void>
     res.status(201).json(comment);
     
   } catch (error) {
+    logger.error('Error adding comment:', error);
     res.status(500).json({ message: 'Server error', error });
   }
 };
@@ -55,6 +57,7 @@ export const getCommentsByResume = async (req: Request, res: Response): Promise<
     res.status(200).json(comments);
 
   } catch (error) {
+    logger.error('Error getting comment with the given ID:', error);
     res.status(500).json({ message: 'Server error', error });
   }
 };
@@ -78,7 +81,7 @@ export const deleteComment = async (req: AuthRequest, res: Response): Promise<vo
 
     res.status(200).json({ message: 'Comment deleted' });
   } catch (error) {
-
+    logger.error('Error deleting comment:', error);
     res.status(500).json({ message: 'Server error', error });
   }
 };

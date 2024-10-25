@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
+import logger from '../helpers/logger';
 
 export const register = async (req: Request, res: Response): Promise<Response> => {
   const { username, email, password, isAdmin } = req.body;
@@ -18,6 +19,7 @@ export const register = async (req: Request, res: Response): Promise<Response> =
 
     return res.status(201).json({ id: user._id, username: user.username, email: user.email });
   } catch (error) {
+    logger.error('Registration error:', error);
     return res.status(500).json({ message: 'Server error', error });
   }
 };

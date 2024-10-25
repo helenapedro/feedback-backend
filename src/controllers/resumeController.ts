@@ -2,6 +2,7 @@ import { AuthRequest } from '../middlewares/auth';
 import { Response } from 'express';
 import Resume from '../models/Resume';
 import { uploadToS3 } from '../services/s3Service';
+import logger from '../helpers/logger';
 
 export const uploadResume = async (req: AuthRequest, res: Response): Promise<void> => {
   const { format } = req.body;
@@ -24,7 +25,7 @@ export const uploadResume = async (req: AuthRequest, res: Response): Promise<voi
 
     res.status(201).json(resume);
   } catch (error) {
-    console.error("Error uploading resume:", error);
+    logger.error("Error uploading resume:", error);
     res.status(500).json({ message: 'Server error', error });
   }
 };
