@@ -1,5 +1,5 @@
 import express from 'express';
-import { uploadResume } from '../controllers/resumeController';
+import { uploadResume, getResumeById, getAllResumes, deleteResumeById } from '../controllers/resumeController';
 import { authMiddleware, AuthRequest } from '../middlewares/auth';
 import { upload } from '../services/s3Service';
 
@@ -22,5 +22,11 @@ router.post(
     }
   }
 );
+
+router.get('/:id', authMiddleware, getResumeById);
+
+router.get('/', authMiddleware, getAllResumes);
+
+router.delete('/:id', authMiddleware, deleteResumeById);
 
 export default router;
