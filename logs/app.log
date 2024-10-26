@@ -75,3 +75,38 @@
 2024-10-25T19:27:33.232Z [info]: GET /api/resumes/671bba5f4cec170def84dea5 401 - 1ms
 2024-10-25T19:28:02.118Z [info]: GET /api/resumes/671bba5f4cec170def84dea5 200 - 12ms
 2024-10-25T19:28:16.399Z [info]: GET /api/resumes/671bba5f4cec170def84dea5 200 - 7ms
+2024-10-26T18:29:24.417Z [info]: Server running on port 5000
+2024-10-26T18:29:30.178Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
+2024-10-26T18:38:10.887Z [info]: GET /api/resumes 401 - 98ms
+2024-10-26T20:10:09.344Z [info]: Server running on port 5000
+2024-10-26T20:10:15.189Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
+2024-10-26T20:23:55.561Z [info]: Server running on port 5000
+2024-10-26T20:24:03.126Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
+2024-10-26T20:27:14.703Z [info]: POST /api/auth/register 201 - 1199ms
+2024-10-26T20:27:57.855Z [info]: POST /api/auth/register 400 - 484ms
+2024-10-26T20:32:56.935Z [info]: POST /api/auth/login 200 - 662ms
+2024-10-26T20:33:29.716Z [info]: POST /api/auth/login 200 - 608ms
+2024-10-26T20:34:01.012Z [info]: POST /api/auth/login 400 - 504ms
+2024-10-26T20:37:48.017Z [info]: mongodb+srv://backend_accessor:Mpssaaa49@resumefeedback.xmgix.mongodb.net/?retryWrites=true&w=majority&appName=ResumeFeedback
+2024-10-26T20:37:48.059Z [info]: Server running on port 5000
+2024-10-26T20:37:54.879Z [info]: MongoDB Connected: resumefeedback-shard-00-01.xmgix.mongodb.net
+2024-10-26T21:06:36.471Z [info]: Server running on port 5000
+2024-10-26T21:07:06.763Z [error]: Error: querySrv ETIMEOUT _mongodb._tcp.resumefeedback.xmgix.mongodb.net
+2024-10-26T21:18:49.185Z [info]: Server running on port 5000
+2024-10-26T21:18:52.488Z [info]: MongoDB Connected: resumefeedback-shard-00-02.xmgix.mongodb.net
+2024-10-26T21:24:40.247Z [info]: POST /api/auth/register 400 - 3179ms
+2024-10-26T21:34:51.546Z [info]: Server running on port 5000
+2024-10-26T21:34:57.559Z [info]: MongoDB Connected: resumefeedback-shard-00-02.xmgix.mongodb.net
+2024-10-26T21:35:26.354Z [info]: POST /api/auth/register 201 - 1755ms
+2024-10-26T21:36:56.050Z [info]: POST /api/resumes/upload 401 - 8ms
+2024-10-26T21:37:08.064Z [info]: POST /api/auth/login 400 - 657ms
+2024-10-26T21:37:19.133Z [info]: POST /api/auth/login 200 - 1256ms
+2024-10-26T21:37:45.813Z [info]: POST /api/resumes/upload 400 - 9ms
+2024-10-26T21:38:39.468Z [info]: POST /api/resumes/upload 201 - 6765ms
+2024-10-26T22:01:09.999Z [info]: Server running on port 5000
+2024-10-26T22:01:15.739Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
+2024-10-26T22:04:21.096Z [info]: POST /api/auth/login 400 - 424ms
+2024-10-26T22:04:29.548Z [info]: POST /api/auth/register 201 - 958ms
+2024-10-26T22:06:12.115Z [info]: POST /api/resumes/upload 201 - 5467ms
+2024-10-26T22:06:28.286Z [info]: POST /api/auth/login 200 - 532ms
+2024-10-26T22:06:34.212Z [info]: GET /api/resumes 401 - 2ms
