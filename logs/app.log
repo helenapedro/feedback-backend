@@ -110,3 +110,22 @@
 2024-10-26T22:06:12.115Z [info]: POST /api/resumes/upload 201 - 5467ms
 2024-10-26T22:06:28.286Z [info]: POST /api/auth/login 200 - 532ms
 2024-10-26T22:06:34.212Z [info]: GET /api/resumes 401 - 2ms
+2024-10-27T14:15:47.606Z [info]: Server running on port 5000
+2024-10-27T14:15:52.994Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
+2024-10-27T14:16:41.086Z [info]: POST /api/auth/login 200 - 504ms
+2024-10-27T14:18:04.680Z [info]: POST /api/resumes/upload 201 - 6742ms
+2024-10-27T14:18:55.507Z [error]: MulterError: Unexpected field
+    at wrappedFileFilter (C:\Users\mbeua\Área de Trabalho\Projects\feedback\node_modules\multer\index.js:40:19)
+    at Multipart.<anonymous> (C:\Users\mbeua\Área de Trabalho\Projects\feedback\node_modules\multer\lib\make-middleware.js:107:7)
+    at Multipart.emit (node:events:518:28)
+    at Multipart.emit (node:domain:488:12)
+    at HeaderParser.cb (C:\Users\mbeua\Área de Trabalho\Projects\feedback\node_modules\busboy\lib\types\multipart.js:358:14)
+    at HeaderParser.push (C:\Users\mbeua\Área de Trabalho\Projects\feedback\node_modules\busboy\lib\types\multipart.js:162:20)
+    at SBMH.ssCb [as _cb] (C:\Users\mbeua\Área de Trabalho\Projects\feedback\node_modules\busboy\lib\types\multipart.js:394:37)
+    at feed (C:\Users\mbeua\Área de Trabalho\Projects\feedback\node_modules\streamsearch\lib\sbmh.js:248:10)
+    at SBMH.push (C:\Users\mbeua\Área de Trabalho\Projects\feedback\node_modules\streamsearch\lib\sbmh.js:104:16)
+    at Multipart._write (C:\Users\mbeua\Área de Trabalho\Projects\feedback\node_modules\busboy\lib\types\multipart.js:567:19)
+2024-10-27T14:18:55.509Z [info]: POST /api/resumes/upload 500 - 12ms
+2024-10-27T14:27:42.424Z [info]: POST /api/resumes/upload 201 - 6798ms
+2024-10-27T14:31:43.226Z [info]: POST /api/resumes/upload 401 - 1ms
+2024-10-27T14:32:17.117Z [info]: POST /api/resumes/upload 201 - 6408ms
