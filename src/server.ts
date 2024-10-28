@@ -14,6 +14,25 @@ const app = express();
 
 const limiter = rateLimit(rateLimitConfig);
 
+const allowedOrigins = [
+     'http://localhost:3000',
+     'https://resumefeedback.mtcambrosio.com'
+];
+
+const corsOptions = {
+     origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+       if (!origin || allowedOrigins.includes(origin)) {
+         callback(null, true); 
+       } else {
+         callback(new Error('Not allowed by CORS')); 
+       }
+     },
+     methods: ['GET', 'POST', 'PUT'],
+     allowedHeaders: ['Authorization', 'Content-Type'],
+};
+
+app.use(cors(corsOptions));
+
 // Middleware
 app.use(express.json());
 app.use(morgan('dev'));
@@ -22,7 +41,7 @@ app.use(cors());
 app.use(requestLogger);
 app.use(errorLogger);
 
-app.use(limiter);
+app.use(limiter); 
 
 // Routes
 app.use('/api/auth', authRoutes);
