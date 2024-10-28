@@ -62,6 +62,35 @@ export const getCommentsByResume = async (req: Request, res: Response): Promise<
   }
 };
 
+export const updateComment = async (req: AuthRequest, res: Response): Promise<void> => {
+  const { commentId } = req.params;
+  const { content } = req.body;
+  const commenterId = req.userId;
+
+  if (!commenterId) {
+    res.status(401).json({ message: 'Unauthorized' });
+    return;
+  }
+
+  try {
+    const comment = await Comment.findOne({ _id: commentId, commenterId });
+
+    if (!comment || comment.isDeleted) {
+      res.status(404).json({ message: 'Comment not found or has been deleted' });
+      return;
+    }
+
+    comment.content = content;
+    await comment.save(); 
+
+    res.status(200).json({ message: 'Comment updated successfully', comment });
+  } catch (error) {
+    logger.error('Error updating comment:', error);
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
+
 export const deleteComment = async (req: AuthRequest, res: Response): Promise<void> => {
   const { commentId } = req.params;
   const commenterId = req.userId;
