@@ -46,8 +46,12 @@ export const getCommentsByResume = async (req: Request, res: Response): Promise<
   }
 
   try {
-    const comments = await Comment.find({ resumeId, isDeleted: false }).populate('commenterId', 'username');
-    
+    const comments = await Comment.find({ resumeId, isDeleted: false })
+      .populate({ path: 'commenterId', select: 'username'})
+      .exec();
+      
+    console.log(comments);
+
     if (!comments || comments.length === 0) {
       res.status(404).json({ message: 'No comments found for this resume' });
       return;
