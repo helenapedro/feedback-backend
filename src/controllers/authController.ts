@@ -50,17 +50,14 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
   }
 };
 
-export const getUser = async (req: AuthRequest, res: Response): Promise<Response> => {
-  const { userId } = req.params;
-  try {
-    const user = await User.findById(userId).select('-password');
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    return res.status(200).json(user);
-  } catch (error) {
-    logger.error('Get User error:', error);
-    return res.status(500).json({ message: 'Server error' });
+export const getUser = async (req: AuthRequest, res: Response): Promise<Response> => { 
+  const { userId } = req.params; 
+  try { 
+    const user = await User.findOne({ _id: userId, isActive: true }).select('-password'); 
+    if (!user) { return res.status(404).json({ message: 'User not found' }); } 
+    return res.status(200).json(user); 
+  } catch (error) { logger.error('Get User error:', error); 
+    return res.status(500).json({ message: 'Server error' }); 
   }
 };
 
@@ -70,14 +67,17 @@ export const updateUser = async (req: AuthRequest, res: Response): Promise<Respo
 
   try {
     const user = await User.findByIdAndUpdate(
-      userId,
-      { username, email },
-      { new: true, runValidators: true }
+      { _id: userId, isActive: true }, 
+      { username, email }, 
+      { new: true, runValidators: true}
     ).select('-password');
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
+
     return res.status(200).json(user);
+
   } catch (error) {
     logger.error('Update User error:', error);
     return res.status(500).json({ message: 'Server error' });
@@ -87,15 +87,19 @@ export const updateUser = async (req: AuthRequest, res: Response): Promise<Respo
 export const changePassword = async (req: AuthRequest, res: Response): Promise<Response> => {
   const { userId } = req;
   const { oldPassword, newPassword } = req.body;
-
   try {
-    const user = await User.findById(userId);
+    const user = await User.findById({ _id: userId, isActive: true});
+    
     if (!user || !(await bcrypt.compare(oldPassword, user.password))) {
       return res.status(400).json({ message: 'Incorrect old password' });
     }
+
     user.password = await bcrypt.hash(newPassword, 10);
+
     await user.save();
+
     return res.status(200).json({ message: 'Password updated successfully' });
+
   } catch (error) {
     logger.error('Change Password error:', error);
     return res.status(500).json({ message: 'Server error' });
@@ -106,7 +110,7 @@ export const deleteUser = async (req: AuthRequest, res: Response): Promise<Respo
   const { userId } = req;
 
   try {
-    const user = await User.findByIdAndUpdate(userId, { isActive: false });
+    const user = await User.findByIdAndUpdate({ _id: userId, isActive: true }, { isActive: false });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
