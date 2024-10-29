@@ -42,7 +42,7 @@ const uploadToS3 = async (file: Express.Multer.File) => {
 
     const result = await upload.done();
 
-    return `https://${CLOUDFRONT_URL}/${result.Key}`;
+    return `${CLOUDFRONT_URL}/${result.Key}`;
 
   } catch (error) {
     logger.error("Error uploading file to S3:", error);
