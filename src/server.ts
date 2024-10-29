@@ -12,6 +12,8 @@ import { requestLogger, errorLogger } from './middlewares/logging';
 
 const app = express();
 
+app.set('trust proxy', 1); 
+
 const limiter = rateLimit(rateLimitConfig);
 
 const allowedOrigins = [
