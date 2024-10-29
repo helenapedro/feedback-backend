@@ -6,6 +6,7 @@ import path from 'path';
 import logger from '../helpers/logger';
 
 const BUCKET_NAME = "feedback-fs";
+const CLOUDFRONT_URL = "https://d1ldjxzzmwekb0.cloudfront.net";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -41,7 +42,7 @@ const uploadToS3 = async (file: Express.Multer.File) => {
 
     const result = await upload.done();
 
-    return `https://${BUCKET_NAME}.s3.amazonaws.com/${result.Key}`;
+    return `https://${CLOUDFRONT_URL}/${result.Key}`;
 
   } catch (error) {
     logger.error("Error uploading file to S3:", error);
