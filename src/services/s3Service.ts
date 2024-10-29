@@ -30,7 +30,7 @@ const uploadToS3 = async (file: Express.Multer.File) => {
     Key: fileName,
     Body: file.buffer,
     ContentType: file.mimetype,
-    ContentDisposition: 'inline', 
+    /* ContentDisposition: 'inline',  */
   };
 
   try {
