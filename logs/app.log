@@ -1,131 +1,20 @@
-2024-10-24T13:31:33.910Z [info]: Server running on port 5000
-2024-10-24T15:24:57.547Z [info]: Server running on port 5000
-2024-10-24T15:38:10.764Z [info]: POST /api/auth/register 500 - 2060ms
-2024-10-24T15:40:34.005Z [info]: POST /api/auth/register 500 - 854ms
-2024-10-24T16:07:52.805Z [info]: Server running on port 5000
-2024-10-24T16:08:57.447Z [info]: POST /api/auth/register 201 - 1113ms
-2024-10-24T16:15:56.152Z [info]: POST /api/auth/register 400 - 462ms
-2024-10-24T16:23:25.951Z [info]: POST /api/auth/login 500 - 685ms
-2024-10-24T16:23:41.700Z [info]: POST /api/auth/register 400 - 443ms
-2024-10-24T16:24:11.249Z [info]: POST /api/auth/login 400 - 448ms
-2024-10-24T16:24:20.747Z [info]: POST /api/auth/login 500 - 581ms
-2024-10-24T16:30:24.597Z [info]: Server running on port 5000
-2024-10-24T16:31:32.173Z [info]: POST /api/auth/register 400 - 445ms
-2024-10-24T16:31:40.546Z [info]: POST /api/auth/login 500 - 528ms
-2024-10-24T16:35:05.402Z [info]: Server running on port 5000
-2024-10-24T16:40:35.003Z [info]: POST /api/auth/register 400 - 460ms
-2024-10-24T16:40:43.115Z [info]: POST /api/auth/login 500 - 537ms
-2024-10-24T16:42:31.760Z [info]: Server running on port 5000
-2024-10-24T16:44:42.146Z [info]: POST /api/auth/login 200 - 618ms
-2024-10-24T16:47:38.258Z [info]: POST /api/resumes/upload 500 - 3625ms
-2024-10-24T16:51:28.793Z [info]: POST /api/resumes/upload 500 - 5924ms
-2024-10-24T16:51:46.467Z [info]: POST /api/auth/login 200 - 587ms
-2024-10-24T16:58:04.058Z [info]: Server running on port 5000
-2024-10-24T17:01:34.034Z [info]: POST /api/resumes/upload 500 - 5407ms
-2024-10-24T17:22:25.216Z [info]: Server running on port 5000
-2024-10-24T17:22:46.140Z [info]: POST /api/auth/register 400 - 435ms
-2024-10-24T17:22:53.597Z [info]: POST /api/auth/login 200 - 519ms
-2024-10-24T17:22:59.278Z [info]: POST /api/auth/login 200 - 515ms
-2024-10-24T17:23:26.361Z [info]: POST /api/resumes/upload 201 - 7304ms
-2024-10-24T17:25:25.677Z [info]: Server running on port 5000
-2024-10-24T17:30:54.809Z [info]: Server running on port 5000
-2024-10-24T17:38:27.290Z [info]: POST /api/resumes/upload 201 - 12728ms
-2024-10-24T17:43:42.423Z [info]: POST /api/comments/add 201 - 1390ms
-2024-10-24T17:45:06.966Z [info]: GET /api/comments/671a874df338968125fb0245 404 - 450ms
-2024-10-24T17:45:30.651Z [info]: GET /api/comments/671a8612f338968125fb0242 200 - 937ms
-2024-10-25T15:16:30.363Z [info]: Server running on port 5000
-2024-10-25T15:16:42.229Z [info]: MongoDB Connected: resumefeedback-shard-00-01.xmgix.mongodb.net
-2024-10-25T15:19:30.943Z [info]: POST /api/auth/login 200 - 576ms
-2024-10-25T15:19:50.764Z [info]: GET /api/comments/671a8612f338968125fb0242 200 - 890ms
-2024-10-25T15:20:27.245Z [info]: POST /api/comments/add 401 - 3ms
-2024-10-25T15:20:39.364Z [info]: POST /api/auth/register 400 - 456ms
-2024-10-25T15:23:50.613Z [info]: POST /api/auth/register 400 - 416ms
-2024-10-25T15:24:15.770Z [info]: POST /api/auth/register 201 - 1028ms
-2024-10-25T15:28:57.111Z [info]: Server running on port 5000
-2024-10-25T15:28:57.136Z [info]: MongoDB Connected: localhost
-2024-10-25T15:29:29.932Z [info]: POST /api/auth/register 201 - 119ms
-2024-10-25T15:30:47.796Z [info]: POST /api/auth/login 200 - 110ms
-2024-10-25T15:31:01.285Z [info]: POST /api/resumes/upload 401 - 3ms
-2024-10-25T15:33:04.693Z [error]: Error uploading resume: Resume validation failed: format: `PDF` is not a valid enum value for path `format`.
-2024-10-25T15:33:04.695Z [info]: POST /api/resumes/upload 500 - 5128ms
-2024-10-25T15:33:51.990Z [info]: POST /api/resumes/upload 201 - 4958ms
-2024-10-25T15:38:24.627Z [info]: POST /api/comments/add 401 - 7ms
-2024-10-25T15:38:42.332Z [info]: POST /api/comments/add 201 - 28ms
-2024-10-25T15:45:31.262Z [info]: Server running on port 5000
-2024-10-25T15:45:37.444Z [info]: MongoDB Connected: resumefeedback-shard-00-02.xmgix.mongodb.net
-2024-10-25T18:52:51.097Z [info]: Server running on port 5000
-2024-10-25T18:52:51.229Z [info]: MongoDB Connected: localhost
-2024-10-25T18:52:57.310Z [info]: GET /api/resumes 404 - 9ms
-2024-10-25T18:55:31.390Z [info]: GET /api/resumes 404 - 5ms
-2024-10-25T18:55:41.558Z [info]: GET /api/comments/671a8612f338968125fb0242 404 - 96ms
-2024-10-25T19:08:16.278Z [info]: Server running on port 5000
-2024-10-25T19:08:16.323Z [info]: MongoDB Connected: localhost
-2024-10-25T19:08:28.296Z [info]: GET /api/resumes/671bba5f4cec170def84dea5 401 - 4ms
-2024-10-25T19:08:36.373Z [info]: POST /api/auth/login 200 - 147ms
-2024-10-25T19:09:03.913Z [info]: GET /api/resumes/671bba5f4cec170def84dea5 200 - 35ms
-2024-10-25T19:14:48.463Z [info]: Server running on port 5000
-2024-10-25T19:14:48.510Z [info]: MongoDB Connected: localhost
-2024-10-25T19:15:17.530Z [info]: GET /api/resumes 401 - 4ms
-2024-10-25T19:15:51.074Z [info]: GET /api/resumes 200 - 47ms
-2024-10-25T19:16:41.517Z [info]: GET /resumes?page=1&limit=5 404 - 2ms
-2024-10-25T19:16:53.457Z [info]: GET /api/resumes?page=1&limit=5 200 - 14ms
-2024-10-25T19:25:55.570Z [info]: Server running on port 5000
-2024-10-25T19:25:55.602Z [info]: MongoDB Connected: localhost
-2024-10-25T19:25:58.892Z [info]: GET /api/resumes 200 - 39ms
-2024-10-25T19:27:33.232Z [info]: GET /api/resumes/671bba5f4cec170def84dea5 401 - 1ms
-2024-10-25T19:28:02.118Z [info]: GET /api/resumes/671bba5f4cec170def84dea5 200 - 12ms
-2024-10-25T19:28:16.399Z [info]: GET /api/resumes/671bba5f4cec170def84dea5 200 - 7ms
-2024-10-26T18:29:24.417Z [info]: Server running on port 5000
-2024-10-26T18:29:30.178Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
-2024-10-26T18:38:10.887Z [info]: GET /api/resumes 401 - 98ms
-2024-10-26T20:10:09.344Z [info]: Server running on port 5000
-2024-10-26T20:10:15.189Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
-2024-10-26T20:23:55.561Z [info]: Server running on port 5000
-2024-10-26T20:24:03.126Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
-2024-10-26T20:27:14.703Z [info]: POST /api/auth/register 201 - 1199ms
-2024-10-26T20:27:57.855Z [info]: POST /api/auth/register 400 - 484ms
-2024-10-26T20:32:56.935Z [info]: POST /api/auth/login 200 - 662ms
-2024-10-26T20:33:29.716Z [info]: POST /api/auth/login 200 - 608ms
-2024-10-26T20:34:01.012Z [info]: POST /api/auth/login 400 - 504ms
-2024-10-26T20:37:48.017Z [info]: mongodb+srv://backend_accessor:Mpssaaa49@resumefeedback.xmgix.mongodb.net/?retryWrites=true&w=majority&appName=ResumeFeedback
-2024-10-26T20:37:48.059Z [info]: Server running on port 5000
-2024-10-26T20:37:54.879Z [info]: MongoDB Connected: resumefeedback-shard-00-01.xmgix.mongodb.net
-2024-10-26T21:06:36.471Z [info]: Server running on port 5000
-2024-10-26T21:07:06.763Z [error]: Error: querySrv ETIMEOUT _mongodb._tcp.resumefeedback.xmgix.mongodb.net
-2024-10-26T21:18:49.185Z [info]: Server running on port 5000
-2024-10-26T21:18:52.488Z [info]: MongoDB Connected: resumefeedback-shard-00-02.xmgix.mongodb.net
-2024-10-26T21:24:40.247Z [info]: POST /api/auth/register 400 - 3179ms
-2024-10-26T21:34:51.546Z [info]: Server running on port 5000
-2024-10-26T21:34:57.559Z [info]: MongoDB Connected: resumefeedback-shard-00-02.xmgix.mongodb.net
-2024-10-26T21:35:26.354Z [info]: POST /api/auth/register 201 - 1755ms
-2024-10-26T21:36:56.050Z [info]: POST /api/resumes/upload 401 - 8ms
-2024-10-26T21:37:08.064Z [info]: POST /api/auth/login 400 - 657ms
-2024-10-26T21:37:19.133Z [info]: POST /api/auth/login 200 - 1256ms
-2024-10-26T21:37:45.813Z [info]: POST /api/resumes/upload 400 - 9ms
-2024-10-26T21:38:39.468Z [info]: POST /api/resumes/upload 201 - 6765ms
-2024-10-26T22:01:09.999Z [info]: Server running on port 5000
-2024-10-26T22:01:15.739Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
-2024-10-26T22:04:21.096Z [info]: POST /api/auth/login 400 - 424ms
-2024-10-26T22:04:29.548Z [info]: POST /api/auth/register 201 - 958ms
-2024-10-26T22:06:12.115Z [info]: POST /api/resumes/upload 201 - 5467ms
-2024-10-26T22:06:28.286Z [info]: POST /api/auth/login 200 - 532ms
-2024-10-26T22:06:34.212Z [info]: GET /api/resumes 401 - 2ms
-2024-10-27T14:15:47.606Z [info]: Server running on port 5000
-2024-10-27T14:15:52.994Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
-2024-10-27T14:16:41.086Z [info]: POST /api/auth/login 200 - 504ms
-2024-10-27T14:18:04.680Z [info]: POST /api/resumes/upload 201 - 6742ms
-2024-10-27T14:18:55.507Z [error]: MulterError: Unexpected field
-    at wrappedFileFilter (C:\Users\mbeua\Área de Trabalho\Projects\feedback\node_modules\multer\index.js:40:19)
-    at Multipart.<anonymous> (C:\Users\mbeua\Área de Trabalho\Projects\feedback\node_modules\multer\lib\make-middleware.js:107:7)
-    at Multipart.emit (node:events:518:28)
-    at Multipart.emit (node:domain:488:12)
-    at HeaderParser.cb (C:\Users\mbeua\Área de Trabalho\Projects\feedback\node_modules\busboy\lib\types\multipart.js:358:14)
-    at HeaderParser.push (C:\Users\mbeua\Área de Trabalho\Projects\feedback\node_modules\busboy\lib\types\multipart.js:162:20)
-    at SBMH.ssCb [as _cb] (C:\Users\mbeua\Área de Trabalho\Projects\feedback\node_modules\busboy\lib\types\multipart.js:394:37)
-    at feed (C:\Users\mbeua\Área de Trabalho\Projects\feedback\node_modules\streamsearch\lib\sbmh.js:248:10)
-    at SBMH.push (C:\Users\mbeua\Área de Trabalho\Projects\feedback\node_modules\streamsearch\lib\sbmh.js:104:16)
-    at Multipart._write (C:\Users\mbeua\Área de Trabalho\Projects\feedback\node_modules\busboy\lib\types\multipart.js:567:19)
-2024-10-27T14:18:55.509Z [info]: POST /api/resumes/upload 500 - 12ms
-2024-10-27T14:27:42.424Z [info]: POST /api/resumes/upload 201 - 6798ms
-2024-10-27T14:31:43.226Z [info]: POST /api/resumes/upload 401 - 1ms
-2024-10-27T14:32:17.117Z [info]: POST /api/resumes/upload 201 - 6408ms
+2024-10-28T23:47:29.343Z [info]: GET /api/users 404 - 1ms
+2024-10-28T23:50:14.437Z [info]: GET /api//user/671da55a261a5239cf579e51 404 - 0ms
+2024-10-28T23:50:38.301Z [info]: GET /api//user/671da55a261a5239cf579e51 404 - 2ms
+2024-10-28T23:51:04.532Z [info]: GET /api//user/671da55a261a5239cf579e51 404 - 2ms
+2024-10-28T23:51:23.501Z [info]: GET /api/user/671da55a261a5239cf579e51 404 - 1ms
+2024-10-28T23:51:48.099Z [info]: GET /api/auth/671da55a261a5239cf579e51 404 - 2ms
+2024-10-28T23:51:57.420Z [info]: GET /api/user/671da55a261a5239cf579e51 404 - 1ms
+2024-10-28T23:52:54.380Z [info]: Server running on port 5000
+2024-10-28T23:53:00.698Z [info]: MongoDB Connected: resumefeedback-shard-00-02.xmgix.mongodb.net
+2024-10-28T23:54:38.437Z [info]: POST /api/auth/register 400 - 468ms
+2024-10-28T23:55:15.068Z [info]: POST /api/auth/register 400 - 442ms
+2024-10-28T23:55:38.648Z [info]: POST /api/auth/login 200 - 715ms
+2024-10-28T23:56:04.293Z [info]: GET /api/user/671da55a261a5239cf579e51 404 - 3ms
+2024-10-28T23:57:09.929Z [info]: GET /api/resumes 401 - 11ms
+2024-10-28T23:57:57.502Z [info]: GET /api/resumes?page=1&limit=5 401 - 5ms
+2024-10-28T23:58:04.276Z [info]: GET /api/resumes/671bba5f4cec170def84dea5 401 - 4ms
+2024-10-28T23:58:19.633Z [info]: POST /api/auth/login 200 - 607ms
+2024-10-28T23:58:37.816Z [info]: GET /api/resumes/671bba5f4cec170def84dea5 404 - 453ms
+2024-10-28T23:58:58.166Z [info]: GET /api/resumes?page=1&limit=5 200 - 1462ms
+2024-10-28T23:59:20.107Z [info]: GET /api/resumes 200 - 1428ms
