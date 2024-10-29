@@ -16,7 +16,7 @@ export const uploadResume = async (req: AuthRequest, res: Response): Promise<voi
   if (!req.file) {
     res.status(400).json({ message: 'No file uploaded' });
     return;
-  }
+  } 
 
   const posterId = req.userId;
   

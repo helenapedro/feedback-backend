@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import logger from '../helpers/logger';
+import { error } from 'console';
 
 export const errorHandler = (
   err: Error, 
@@ -9,10 +10,11 @@ export const errorHandler = (
 ) => {
   logger.error(err.stack); 
 
-  const isProduction = process.env.NODE_ENV === 'production';
+  //const isProduction = process.env.NODE_ENV === 'production';
 
   res.status(500).json({
     message: 'Internal Server Error',
-    ...(isProduction ? {} : { error: err.message }),
+    error
+    /* ...(isProduction ? {} : { error: err.message }), */
   });
 };
