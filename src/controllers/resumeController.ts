@@ -55,16 +55,20 @@ export const getResumeById = async (req: RequestWithParams, res: Response): Prom
 };
 
 export const getAllResumes = async (req: Request, res: Response): Promise<void> => {
-  const { page = 1, limit = 10 } = req.query;
+  const { page = 1, limit = 10, format, createdAt } = req.query;
 
   try {
-    const resumes = await Resume.find()
+    const filters: any = {};
+    if (format) filters.format = format;
+    if (createdAt) filters.createdAt = new Date(createdAt as string);
+
+    const resumes = await Resume.find(filters)
       .sort({ createdAt: -1 })
       .skip((+page - 1) * +limit)
       .limit(+limit)
       .populate('posterId', '-password');
 
-    const totalResumes = await Resume.countDocuments();
+    const totalResumes = await Resume.countDocuments(filters);
 
     res.status(200).json({
       totalResumes,
