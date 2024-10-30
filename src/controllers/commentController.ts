@@ -21,15 +21,9 @@ export const addComment = async (req: AuthRequest, res: Response): Promise<void>
       return;
     }
 
-    const comment = await Comment.create({
-      resumeId,
-      commenterId,
-      content,
-    });
-
+    const comment = await Comment.create({ resumeId, commenterId, content });
     clearCache(resumeId);
     res.status(201).json(comment);
-    
   } catch (error) {
     logger.error('Error adding comment:', error);
     res.status(500).json({ message: 'Server error', error });
@@ -55,10 +49,10 @@ export const getCommentsByResume = async (req: Request, res: Response): Promise<
       return;
     }
 
-    const validComments = comments.filter((comment) => {
+    const validComments = comments.filter(comment => {
       if (!comment.commenterId) {
         logger.warn(`Undefined commenterId in comment ID: ${comment._id}`);
-        return false; 
+        return false;
       }
       return true;
     });
@@ -83,19 +77,17 @@ export const updateComment = async (req: AuthRequest, res: Response): Promise<vo
 
   try {
     const comment = await Comment.findOne({ _id: commentId, commenterId });
-
     if (!comment || comment.isDeleted) {
       res.status(404).json({ message: 'Comment not found or has been deleted' });
       return;
     }
 
     comment.content = content;
-    await comment.save(); 
-
+    await comment.save();
     res.status(200).json({ message: 'Comment updated successfully', comment });
   } catch (error) {
     logger.error('Error updating comment:', error);
-    res.status(500).json({ message: 'Server error', error });
+    res.status(500).json({ message: 'Server error', error});
   }
 };
 
