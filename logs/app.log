@@ -43,3 +43,11 @@
 2024-10-29T00:51:23.799Z [info]: POST /api/auth/user/change-password 200 - 1305ms
 2024-10-29T00:51:33.375Z [info]: POST /api/auth/login 400 - 690ms
 2024-10-29T00:51:44.049Z [info]: POST /api/auth/login 200 - 621ms
+2024-10-30T19:26:49.798Z [info]: Server running on port 5000
+2024-10-30T19:26:55.506Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
+2024-10-30T19:40:06.039Z [info]: POST /api/auth/login 400 - 2323ms
+2024-10-30T19:40:28.448Z [info]: POST /api/auth/login 200 - 555ms
+2024-10-30T19:41:05.581Z [info]: GET /api/resumes/671bba5f4cec170def84dea5 404 - 435ms
+2024-10-30T19:41:41.294Z [info]: GET /api/resumes/67209f9646853a41e55a6679 200 - 2462ms
+2024-10-30T19:42:58.494Z [info]: GET /api/comments/671a8612f338968125fb0242 404 - 914ms
+2024-10-30T19:43:38.009Z [info]: GET /api/comments/67209f9646853a41e55a6679 200 - 2581ms
