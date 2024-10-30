@@ -59,8 +59,15 @@ export const getAllResumes = async (req: Request, res: Response): Promise<void> 
 
   try {
     const filters: any = {};
-    if (format) filters.format = format;
-    if (createdAt) filters.createdAt = new Date(createdAt as string);
+
+    if (format) filters.format = { $regex: format, $options: 'i' };
+
+    if (createdAt) {
+      const date = new Date(createdAt as string);
+      const nextDay = new Date(date);
+      nextDay.setDate(date.getDate() + 1);
+      filters.createdAt = { $gte: date, $lt: nextDay };
+    } 
 
     const resumes = await Resume.find(filters)
       .sort({ createdAt: -1 })
