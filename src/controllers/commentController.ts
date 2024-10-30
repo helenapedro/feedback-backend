@@ -55,13 +55,19 @@ export const getCommentsByResume = async (req: Request, res: Response): Promise<
       return;
     }
 
+    comments.forEach((comment) => {
+      if (!comment.commenterId) {
+        logger.warn(`Undefined commenterId in comment ID: ${comment._id}`);
+      }
+    });
+
     setCache(resumeId, comments);
     res.status(200).json(comments);
 
-  } catch (error) {
-    logger.error('Error getting comment with the given ID:', error);
-    res.status(500).json({ message: 'Server error', error });
-  }
+    } catch (error) {
+      logger.error('Error getting comment with the given ID:', error);
+      res.status(500).json({ message: 'Server error', error });
+    }
 };
 
 export const updateComment = async (req: AuthRequest, res: Response): Promise<void> => {
