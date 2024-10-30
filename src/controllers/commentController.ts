@@ -47,7 +47,7 @@ export const getCommentsByResume = async (req: Request, res: Response): Promise<
 
   try {
     const comments = await Comment.find({ resumeId, isDeleted: false })
-      .populate({ path: 'commenterId', select: 'username'})
+      .populate({ path: 'commenterId', select: 'username' })
       .exec();
 
     if (!comments || comments.length === 0) {
@@ -55,19 +55,20 @@ export const getCommentsByResume = async (req: Request, res: Response): Promise<
       return;
     }
 
-    comments.forEach((comment) => {
+    const validComments = comments.filter((comment) => {
       if (!comment.commenterId) {
         logger.warn(`Undefined commenterId in comment ID: ${comment._id}`);
+        return false; 
       }
+      return true;
     });
 
-    setCache(resumeId, comments);
-    res.status(200).json(comments);
-
-    } catch (error) {
-      logger.error('Error getting comment with the given ID:', error);
-      res.status(500).json({ message: 'Server error', error });
-    }
+    setCache(resumeId, validComments);
+    res.status(200).json(validComments);
+  } catch (error) {
+    logger.error('Error getting comments for the given resume ID:', error);
+    res.status(500).json({ message: 'Server error', error });
+  }
 };
 
 export const updateComment = async (req: AuthRequest, res: Response): Promise<void> => {
