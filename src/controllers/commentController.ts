@@ -22,10 +22,13 @@ export const addComment = async (req: AuthRequest, res: Response): Promise<void>
     }
 
     const comment = await Comment.create({ resumeId, commenterId, content });
+
     clearCache(resumeId);
+
     res.status(201).json(comment);
   } catch (error) {
     logger.error('Error adding comment:', error);
+    
     res.status(500).json({ message: 'Server error', error });
   }
 };
@@ -58,6 +61,7 @@ export const getCommentsByResume = async (req: Request, res: Response): Promise<
     });
 
     setCache(resumeId, validComments);
+
     res.status(200).json(validComments);
   } catch (error) {
     logger.error('Error getting comments for the given resume ID:', error);
@@ -84,6 +88,9 @@ export const updateComment = async (req: AuthRequest, res: Response): Promise<vo
 
     comment.content = content;
     await comment.save();
+
+    clearCache(comment.resumeId.toString());
+
     res.status(200).json({ message: 'Comment updated successfully', comment });
   } catch (error) {
     logger.error('Error updating comment:', error);
@@ -105,6 +112,7 @@ export const deleteComment = async (req: AuthRequest, res: Response): Promise<vo
     }
 
     comment.isDeleted = true;
+    
     await comment.save();
 
     clearCache(comment.resumeId.toString());

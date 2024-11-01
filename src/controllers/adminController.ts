@@ -12,7 +12,7 @@ export const getAllUsers = async (req: Request, res: Response): Promise<Response
   }
 };
 
-/* export const deactivateUser = async (req: Request, res: Response): Promise<Response> => {
+export const deactivateUser = async (req: Request, res: Response): Promise<Response> => {
   const { userId } = req.params;
 
   try {
@@ -26,4 +26,3 @@ export const getAllUsers = async (req: Request, res: Response): Promise<Response
     return res.status(500).json({ message: 'Server error' });
   }
 };
- */
