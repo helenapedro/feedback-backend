@@ -56,6 +56,9 @@ export const getResumeById = async (req: RequestWithParams, res: Response): Prom
 
 export const getAllResumes = async (req: Request, res: Response): Promise<void> => {
   const { page = 1, limit = 10, format, createdAt } = req.query;
+  const maxLimit = 100; 
+
+  const effectiveLimit = Math.min(Number(limit) || 10, maxLimit); 
 
   try {
     const filters: any = {};
@@ -71,16 +74,16 @@ export const getAllResumes = async (req: Request, res: Response): Promise<void> 
 
     const resumes = await Resume.find(filters)
       .sort({ createdAt: -1 })
-      .skip((+page - 1) * +limit)
-      .limit(+limit)
+      .skip((Number(page) - 1) * effectiveLimit)
+      .limit(effectiveLimit)
       .populate('posterId', '-password');
 
     const totalResumes = await Resume.countDocuments(filters);
 
     res.status(200).json({
       totalResumes,
-      currentPage: +page,
-      totalPages: Math.ceil(totalResumes / +limit),
+      currentPage: Number(page),
+      totalPages: Math.ceil(totalResumes / effectiveLimit),
       resumes,
     });
   } catch (error) {

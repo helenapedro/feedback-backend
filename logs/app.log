@@ -51,3 +51,18 @@
 2024-10-30T19:41:41.294Z [info]: GET /api/resumes/67209f9646853a41e55a6679 200 - 2462ms
 2024-10-30T19:42:58.494Z [info]: GET /api/comments/671a8612f338968125fb0242 404 - 914ms
 2024-10-30T19:43:38.009Z [info]: GET /api/comments/67209f9646853a41e55a6679 200 - 2581ms
+2024-11-01T09:59:46.020Z [info]: Server running on port 5000
+2024-11-01T09:59:52.020Z [info]: MongoDB Connected: resumefeedback-shard-00-01.xmgix.mongodb.net
+2024-11-01T10:00:38.196Z [info]: POST /api/auth/login 200 - 566ms
+2024-11-01T10:00:52.539Z [info]: GET /api/auth/user/671d676d310578770bb76edc 401 - 4ms
+2024-11-01T10:00:59.953Z [info]: GET /api/auth/user/671d676d310578770bb76edc 200 - 452ms
+2024-11-01T10:01:21.635Z [info]: GET /api/resumes 401 - 1ms
+2024-11-01T10:01:29.135Z [info]: GET /api/resumes 200 - 1319ms
+2024-11-01T10:01:42.605Z [info]: GET /api/resumes/67209f9646853a41e55a6679 401 - 1ms
+2024-11-01T10:01:49.645Z [info]: GET /api/resumes/67209f9646853a41e55a6679 200 - 871ms
+2024-11-01T10:02:00.908Z [info]: GET /api/resumes?page=1&limit=5 401 - 1ms
+2024-11-01T10:02:08.289Z [info]: GET /api/resumes?page=1&limit=5 200 - 1303ms
+2024-11-01T10:37:51.767Z [info]: POST /api/resumes/upload 401 - 11ms
+2024-11-01T10:38:01.765Z [info]: POST /api/auth/login 200 - 3211ms
+2024-11-01T10:38:23.820Z [info]: POST /api/resumes/upload 201 - 5702ms
+2024-11-01T10:38:47.719Z [info]: GET /api/comments/67209f9646853a41e55a6679 200 - 937ms

@@ -10,11 +10,8 @@ export const errorHandler = (
 ) => {
   logger.error(err.stack); 
 
-  //const isProduction = process.env.NODE_ENV === 'production';
-
   res.status(500).json({
-    message: 'Internal Server Error',
+    message: err.message || 'Internal Server Error',
     error
-    /* ...(isProduction ? {} : { error: err.message }), */
   });
 };
