@@ -66,3 +66,7 @@
 2024-11-01T10:38:01.765Z [info]: POST /api/auth/login 200 - 3211ms
 2024-11-01T10:38:23.820Z [info]: POST /api/resumes/upload 201 - 5702ms
 2024-11-01T10:38:47.719Z [info]: GET /api/comments/67209f9646853a41e55a6679 200 - 937ms
+2024-11-01T10:57:17.422Z [info]: Server running on port 5000
+2024-11-01T10:57:23.859Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
+2024-11-01T10:57:53.586Z [info]: GET /api/comments/67209f9646853a41e55a6679 200 - 928ms
+2024-11-01T10:58:04.993Z [info]: GET /api/resumes 200 - 1360ms
