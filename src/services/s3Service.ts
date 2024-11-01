@@ -19,9 +19,15 @@ const formatDate = (date: Date) => {
 };
 
 const uploadToS3 = async (file: Express.Multer.File) => {
+  const maxFileSize = 10 * 1024 * 1024; // 10 MB limit
+  const retryLimit = 3;
   const ext = path.extname(file.originalname);
   const formattedDate = formatDate(new Date());
   const uniqueId = uuidv4();
+
+  if (file.size > maxFileSize) {
+    throw new Error('File size exceeds the 10 MB limit');
+  }
 
   const folderName = ['.pdf', '.docx'].includes(ext) ? 'pdf' : 'image';
   const fileName = `${folderName}/resume_${formattedDate}_${uniqueId}${ext}`; 
@@ -34,19 +40,20 @@ const uploadToS3 = async (file: Express.Multer.File) => {
     /* ContentDisposition: 'inline',  */
   };
 
-  try {
-    const upload = new Upload({
-      client: s3,
-      params: uploadParams,
-    });
-
-    const result = await upload.done();
-
-    return `${CLOUDFRONT_URL}/${result.Key}`;
-
-  } catch (error) {
-    logger.error("Error uploading file to S3:", error);
-    throw new Error('Upload to S3 failed');
+  for (let attempt = 1; attempt <= retryLimit; attempt++) {
+    try {
+      const upload = new Upload({
+        client: s3,
+        params: uploadParams,
+      });
+      const result = await upload.done();
+      return `${CLOUDFRONT_URL}/${result.Key}`;
+    } catch (error) {
+      logger.error(`Error uploading file to S3, attempt ${attempt}:`, error);
+      if (attempt === retryLimit) {
+        throw new Error('Upload to S3 failed after multiple attempts');
+      }
+    }
   }
 };
 
