@@ -70,3 +70,16 @@
 2024-11-01T10:57:23.859Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
 2024-11-01T10:57:53.586Z [info]: GET /api/comments/67209f9646853a41e55a6679 200 - 928ms
 2024-11-01T10:58:04.993Z [info]: GET /api/resumes 200 - 1360ms
+2024-11-01T15:33:35.961Z [info]: Server running on port 5000
+2024-11-01T15:33:41.445Z [info]: MongoDB Connected: resumefeedback-shard-00-01.xmgix.mongodb.net
+2024-11-01T15:33:44.325Z [info]: GET /api/comments/6724bba76f9cb6cb7a4704a0 200 - 866ms
+2024-11-01T15:34:15.871Z [info]: GET /api/comments/6724bba76f9cb6cb7a4704a0 200 - 15ms
+2024-11-01T15:34:45.254Z [info]: POST /api/auth/login 200 - 549ms
+2024-11-01T15:35:20.918Z [info]: GET /api/comments/6724bba76f9cb6cb7a4704a0 200 - 12ms
+2024-11-01T19:25:27.776Z [info]: Server running on port 5000
+2024-11-01T19:25:34.036Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
+2024-11-01T19:25:35.706Z [info]: GET /api/comments/6724bba76f9cb6cb7a4704a0 200 - 2445ms
+2024-11-01T19:26:56.134Z [info]: GET /api/comments/6724bba76f9cb6cb7a4704a0 200 - 5ms
+2024-11-01T19:27:02.687Z [info]: GET /api/comments/6724bba76f9cb6cb7a4704a0 200 - 5ms
+2024-11-01T19:27:14.595Z [info]: GET /api/comments/6724bba76f9cb6cb7a4704a0 200 - 6ms
+2024-11-01T19:30:41.282Z [info]: GET /api/comments/6724bba76f9cb6cb7a4704a0 200 - 911ms
