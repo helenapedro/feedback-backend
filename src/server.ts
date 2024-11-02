@@ -1,14 +1,14 @@
 import express from 'express';
-import helmet from "helmet";
-import morgan from "morgan";
+import morgan from 'morgan';
+import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import { rateLimitConfig } from './config';
 import authRoutes from './routes/authRoutes';
 import resumeRoutes from './routes/resumeRoutes';
 import commentRoutes from './routes/commentRoutes';
-import { errorLogger, requestLogger } from './middlewares/logging';
-import { errorHandler } from './middlewares';
+import { errorHandler } from './middlewares/errorHandler';
+import { requestLogger, errorLogger } from './middlewares/logging';
 
 const app = express();
 
