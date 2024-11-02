@@ -83,3 +83,6 @@
 2024-11-01T19:27:02.687Z [info]: GET /api/comments/6724bba76f9cb6cb7a4704a0 200 - 5ms
 2024-11-01T19:27:14.595Z [info]: GET /api/comments/6724bba76f9cb6cb7a4704a0 200 - 6ms
 2024-11-01T19:30:41.282Z [info]: GET /api/comments/6724bba76f9cb6cb7a4704a0 200 - 911ms
+2024-11-02T14:58:04.519Z [info]: Server running on port 5000
+2024-11-02T14:58:10.504Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
+2024-11-02T14:58:42.896Z [info]: GET /api/comments/671d67d3310578770bb76ede 200 - 809ms
