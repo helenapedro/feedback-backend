@@ -1,10 +1,14 @@
 import express from 'express';
-import * as middlewares from './middlewares/index';
+import helmet from "helmet";
+import morgan from "morgan";
+import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import { rateLimitConfig } from './config';
 import authRoutes from './routes/authRoutes';
 import resumeRoutes from './routes/resumeRoutes';
 import commentRoutes from './routes/commentRoutes';
+import { errorLogger, requestLogger } from './middlewares/logging';
+import { errorHandler } from './middlewares';
 
 const app = express();
 
@@ -29,14 +33,14 @@ const corsOptions = {
   allowedHeaders: ['Authorization', 'Content-Type'],
 };
 
-app.use(middlewares.cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(express.json());
-app.use(middlewares.morgan('dev'));
-app.use(middlewares.helmet());
-app.use(middlewares.cors());
-app.use(middlewares.requestLogger);
-app.use(middlewares.errorLogger);
-app.use(middlewares.errorHandler);
+app.use(morgan('dev'));
+app.use(helmet());
+app.use(cors());
+app.use(requestLogger);
+app.use(errorLogger);
+app.use(errorHandler);
 app.use(limiter);
 
 // Routes
