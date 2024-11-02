@@ -69,12 +69,15 @@ export const getCommentsByResume = async (req: Request, res: Response): Promise<
     });
 
     setCache(resumeId, validComments);
-
     res.status(200).json(validComments);
-  } catch (error) {
-    logger.error('Error getting comments for the given resume ID:', error);
-    res.status(500).json({ message: 'Server error', error });
-  }
+  } catch (error) { 
+    if (error instanceof TypeError && error.message.includes('populated')) { 
+      logger.error('Population Error:', error); 
+    } else { 
+      logger.error('Error getting comments for the given resume ID:', error); 
+    } 
+    res.status(500).json({ message: 'Server error', error }); 
+  } 
 };
 
 export const updateComment = async (req: AuthRequest, res: Response): Promise<void> => {
