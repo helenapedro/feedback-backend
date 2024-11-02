@@ -47,6 +47,8 @@ export const getCommentsByResume = async (req: Request, res: Response): Promise<
       .populate({ path: 'commenterId', select: 'username' })
       .exec();
 
+    logger.info(`Fetched comments: ${JSON.stringify(comments)}`);
+
     if (!comments || comments.length === 0) {
       res.status(404).json({ message: 'No comments found for this resume' });
       return;
