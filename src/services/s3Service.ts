@@ -37,7 +37,6 @@ const uploadToS3 = async (file: Express.Multer.File) => {
     Key: fileName,
     Body: file.buffer,
     ContentType: file.mimetype,
-    /* ContentDisposition: 'inline',  */
   };
 
   for (let attempt = 1; attempt <= retryLimit; attempt++) {
