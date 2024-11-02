@@ -5,8 +5,8 @@
        "outDir": "./dist",
        "rootDir": "./src",
        "strict": true,
-       "esModuleInterop": true,
-       "typeRoots": ["node_modules/@types"], "types": ["node"],
+      /*  "esModuleInterop": true,
+       "typeRoots": ["node_modules/@types"], "types": ["node"], */
      },
      "include": ["src/**/*.ts"],
      "exclude": ["node_modules", ".env"]
