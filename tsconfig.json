@@ -1,14 +1,13 @@
 {
-     "compilerOptions": {
-       "target": "ES6",
-       "module": "commonjs",
-       "outDir": "./dist",
-       "rootDir": "./src",
-       "strict": true,
-      /*  "esModuleInterop": true,
-       "typeRoots": ["node_modules/@types"], "types": ["node"], */
-     },
-     "include": ["src/**/*.ts"],
-     "exclude": ["node_modules", ".env"]
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    //"typeRoots": ["node_modules/@types"], "types": ["node"],
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", ".env"]
 }
-   
