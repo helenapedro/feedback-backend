@@ -110,3 +110,5 @@
 2024-11-02T17:25:45.936Z [info]: Server running on port 5000
 2024-11-02T17:25:51.748Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
 2024-11-02T17:29:17.339Z [info]: GET /api/comments/671d67d3310578770bb76ede 200 - 1042ms
+2024-11-02T17:34:51.786Z [info]: POST /api/auth/login 200 - 605ms
+2024-11-02T17:37:02.555Z [info]: POST /api/auth/login 200 - 922ms
