@@ -1,4 +1,3 @@
-import express from 'express';
 import connectDB from './helpers/mongoconn';
 import app from './server';
 import * as dotenv from 'dotenv';
