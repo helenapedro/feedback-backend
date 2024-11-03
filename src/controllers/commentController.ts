@@ -52,17 +52,11 @@ export const getCommentsByResume = async (req: Request, res: Response): Promise<
     if (!comments || comments.length === 0) {
       res.status(404).json({ message: 'No comments found for this resume' });
       return;
-    }
-
-    comments.forEach(comment => {
-      if (comment.commenterId && typeof comment.populated === 'function' && !comment.populated('commenterId')) {
-        logger.warn(`Comment ${comment._id} failed to populate commenterId`);
-      }
-    });    
+    } 
 
     const validComments = comments.filter(comment => {
-      if (!comment.commenterId) {
-        logger.warn(`Undefined commenterId in comment ID: ${comment._id}`);
+      if (!comment.commenterId || typeof comment.commenterId !== 'object') {
+        logger.warn(`Comment: ${comment._id} han an undefined or unpopulated commenterId`);
         return false;
       }
       return true;
