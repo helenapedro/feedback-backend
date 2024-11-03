@@ -8,8 +8,8 @@ router.post('/add', authMiddleware, addComment);
 
 router.get('/:resumeId', getCommentsByResume);
 
-router.put('/comments/:commentId', authMiddleware, updateComment)
+router.put('/:commentId', authMiddleware, updateComment)
 
-router.delete('/comments/:commentId', authMiddleware, deleteComment);
+router.delete(':commentId', authMiddleware, deleteComment);
 
 export default router;
