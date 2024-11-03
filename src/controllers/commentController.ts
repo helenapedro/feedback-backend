@@ -43,7 +43,9 @@ export const getCommentsByResume = async (req: Request, res: Response): Promise<
   }
 
   try {
-    const comments = await Comment.find({ resumeId, isDeleted: false }).populate({ path: 'commenterId', select: 'username' });
+    const comments = await Comment.find({ resumeId, isDeleted: false })
+      .populate({ path: 'commenterId', select: 'username' })
+      .exec();
 
     logger.info(`Fetched comments: ${JSON.stringify(comments)}`);
 
