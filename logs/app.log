@@ -179,3 +179,10 @@
 2024-11-03T17:36:08.399Z [info]: GET /api/admin/users 404 - 0ms
 2024-11-03T17:37:08.113Z [info]: GET /api/admin/users 404 - 3ms
 2024-11-03T17:37:15.187Z [info]: GET /api/auth/users 404 - 1ms
+2024-11-03T17:37:44.848Z [info]: Server running on port 5000
+2024-11-03T17:37:53.577Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
+2024-11-03T17:37:57.433Z [info]: Fetched comments: [{"_id":"671fe18b6b57bb660fcabb8a","resumeId":"671d67d3310578770bb76ede","commenterId":{"_id":"671da55a261a5239cf579e51","username":"test123"},"content":"good","isDeleted":false,"createdAt":"2024-10-28T19:10:03.563Z","updatedAt":"2024-10-28T19:10:03.563Z","__v":0},{"_id":"672636bfb9ee5f79a8d8ab74","resumeId":"671d67d3310578770bb76ede","commenterId":{"_id":"671da55a261a5239cf579e51","username":"test123"},"content":"Test4321","isDeleted":false,"createdAt":"2024-11-02T14:27:11.794Z","updatedAt":"2024-11-02T14:27:11.794Z","__v":0},{"_id":"67266a6e1f204886c8fc69d4","resumeId":"671d67d3310578770bb76ede","commenterId":{"_id":"671d676d310578770bb76edc","username":"mapassa"},"content":"Test!","isDeleted":false,"createdAt":"2024-11-02T18:07:42.104Z","updatedAt":"2024-11-02T18:07:42.104Z","__v":0}]
+2024-11-03T17:37:57.470Z [info]: GET /api/comments/671d67d3310578770bb76ede 200 - 12130ms
+2024-11-03T17:40:09.786Z [info]: GET /api/auth/users 404 - 2ms
+2024-11-03T17:40:17.324Z [info]: GET /api/admin/users 404 - 1ms
+2024-11-03T17:40:24.716Z [info]: GET /api/users 404 - 0ms
