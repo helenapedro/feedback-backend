@@ -10,6 +10,6 @@ router.get('/:resumeId', getCommentsByResume);
 
 router.put('/:commentId', authMiddleware, updateComment)
 
-router.delete(':commentId', authMiddleware, deleteComment);
+router.delete('/:commentId', authMiddleware, deleteComment);
 
 export default router;

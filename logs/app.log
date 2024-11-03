@@ -200,3 +200,5 @@
 2024-11-03T21:28:14.666Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
 2024-11-03T21:28:35.495Z [info]: PUT /api/comments/comments/6726161cbb6d6ede5765e6b0 404 - 3ms
 2024-11-03T21:28:44.426Z [info]: PUT /api/comments/6726161cbb6d6ede5765e6b0 200 - 772ms
+2024-11-03T21:32:45.871Z [info]: DELETE /api/comments/6726161cbb6d6ede5765e6b0 404 - 51ms
+2024-11-03T21:33:01.994Z [info]: DELETE /api/comments/comments/6726161cbb6d6ede5765e6b0 404 - 1ms
