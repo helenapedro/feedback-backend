@@ -115,3 +115,67 @@
 2024-11-02T17:43:23.146Z [info]: Server running on port 5000
 2024-11-02T17:43:28.502Z [info]: MongoDB Connected: resumefeedback-shard-00-02.xmgix.mongodb.net
 2024-11-02T17:43:42.577Z [info]: POST /api/auth/login 200 - 520ms
+2024-11-03T04:08:48.379Z [info]: Server running on port 5000
+2024-11-03T04:08:53.673Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
+2024-11-03T04:09:03.298Z [info]: POST /api/auth/login 200 - 519ms
+2024-11-03T04:09:03.784Z [info]: GET /api/auth/user/671da55a261a5239cf579e51 200 - 391ms
+2024-11-03T04:09:04.592Z [info]: GET /api/resumes?page=1&limit=10 200 - 1159ms
+2024-11-03T04:09:21.065Z [info]: GET /api/resumes/67255aa399ce844b7100235a 200 - 745ms
+2024-11-03T04:09:21.843Z [info]: Fetched comments: [{"_id":"6726161cbb6d6ede5765e6b0","resumeId":"67255aa399ce844b7100235a","commenterId":{"_id":"671da55a261a5239cf579e51","username":"test123"},"content":"kkok","isDeleted":false,"createdAt":"2024-11-02T12:07:56.019Z","updatedAt":"2024-11-02T12:07:56.019Z","__v":0},{"_id":"6726173abb6d6ede5765e6dd","resumeId":"67255aa399ce844b7100235a","commenterId":{"_id":"671da55a261a5239cf579e51","username":"test123"},"content":"test","isDeleted":false,"createdAt":"2024-11-02T12:12:42.671Z","updatedAt":"2024-11-02T12:12:42.671Z","__v":0}]
+2024-11-03T04:09:21.880Z [info]: GET /api/comments/67255aa399ce844b7100235a 200 - 779ms
+2024-11-03T04:10:18.459Z [info]: POST /api/comments/add 201 - 750ms
+2024-11-03T04:11:02.088Z [info]: PUT /api/comments/6726f7aa0c5e0fd6f08f41e1 404 - 2ms
+2024-11-03T04:11:51.089Z [info]: GET /api/auth/user/671da55a261a5239cf579e51 304 - 374ms
+2024-11-03T04:11:51.447Z [info]: GET /api/resumes/67255aa399ce844b7100235a 304 - 739ms
+2024-11-03T04:11:52.221Z [info]: Fetched comments: [{"_id":"6726161cbb6d6ede5765e6b0","resumeId":"67255aa399ce844b7100235a","commenterId":{"_id":"671da55a261a5239cf579e51","username":"test123"},"content":"kkok","isDeleted":false,"createdAt":"2024-11-02T12:07:56.019Z","updatedAt":"2024-11-02T12:07:56.019Z","__v":0},{"_id":"6726173abb6d6ede5765e6dd","resumeId":"67255aa399ce844b7100235a","commenterId":{"_id":"671da55a261a5239cf579e51","username":"test123"},"content":"test","isDeleted":false,"createdAt":"2024-11-02T12:12:42.671Z","updatedAt":"2024-11-02T12:12:42.671Z","__v":0},{"_id":"6726f7aa0c5e0fd6f08f41e1","resumeId":"67255aa399ce844b7100235a","commenterId":{"_id":"671da55a261a5239cf579e51","username":"test123"},"content":"tEST4321","isDeleted":false,"createdAt":"2024-11-03T04:10:18.086Z","updatedAt":"2024-11-03T04:10:18.086Z","__v":0}]
+2024-11-03T04:11:52.228Z [info]: GET /api/comments/67255aa399ce844b7100235a 200 - 746ms
+2024-11-03T04:12:34.188Z [info]: Fetched comments: []
+2024-11-03T04:12:34.190Z [info]: GET /api/comments/6726f7aa0c5e0fd6f08f41e1 404 - 371ms
+2024-11-03T04:12:34.527Z [info]: GET /favicon.ico 404 - 4ms
+2024-11-03T04:19:12.788Z [info]: GET /api/auth/user/671da55a261a5239cf579e51 304 - 405ms
+2024-11-03T04:19:13.143Z [info]: GET /api/resumes/67255aa399ce844b7100235a 304 - 825ms
+2024-11-03T04:19:13.929Z [info]: Fetched comments: [{"_id":"6726161cbb6d6ede5765e6b0","resumeId":"67255aa399ce844b7100235a","commenterId":{"_id":"671da55a261a5239cf579e51","username":"test123"},"content":"kkok","isDeleted":false,"createdAt":"2024-11-02T12:07:56.019Z","updatedAt":"2024-11-02T12:07:56.019Z","__v":0},{"_id":"6726173abb6d6ede5765e6dd","resumeId":"67255aa399ce844b7100235a","commenterId":{"_id":"671da55a261a5239cf579e51","username":"test123"},"content":"test","isDeleted":false,"createdAt":"2024-11-02T12:12:42.671Z","updatedAt":"2024-11-02T12:12:42.671Z","__v":0},{"_id":"6726f7aa0c5e0fd6f08f41e1","resumeId":"67255aa399ce844b7100235a","commenterId":{"_id":"671da55a261a5239cf579e51","username":"test123"},"content":"tEST4321","isDeleted":false,"createdAt":"2024-11-03T04:10:18.086Z","updatedAt":"2024-11-03T04:10:18.086Z","__v":0}]
+2024-11-03T04:19:13.943Z [info]: GET /api/comments/67255aa399ce844b7100235a 304 - 749ms
+2024-11-03T04:19:53.037Z [info]: GET /api/auth/user/671da55a261a5239cf579e51 304 - 377ms
+2024-11-03T04:19:53.403Z [info]: GET /api/resumes/67255aa399ce844b7100235a 304 - 752ms
+2024-11-03T04:19:53.434Z [info]: GET /api/comments/67255aa399ce844b7100235a 304 - 8ms
+2024-11-03T04:21:49.586Z [info]: Fetched comments: [{"_id":"6726161cbb6d6ede5765e6b0","resumeId":"67255aa399ce844b7100235a","commenterId":{"_id":"671da55a261a5239cf579e51","username":"test123"},"content":"kkok","isDeleted":false,"createdAt":"2024-11-02T12:07:56.019Z","updatedAt":"2024-11-02T12:07:56.019Z","__v":0},{"_id":"6726173abb6d6ede5765e6dd","resumeId":"67255aa399ce844b7100235a","commenterId":{"_id":"671da55a261a5239cf579e51","username":"test123"},"content":"test","isDeleted":false,"createdAt":"2024-11-02T12:12:42.671Z","updatedAt":"2024-11-02T12:12:42.671Z","__v":0},{"_id":"6726f7aa0c5e0fd6f08f41e1","resumeId":"67255aa399ce844b7100235a","commenterId":{"_id":"671da55a261a5239cf579e51","username":"test123"},"content":"tEST4321","isDeleted":false,"createdAt":"2024-11-03T04:10:18.086Z","updatedAt":"2024-11-03T04:10:18.086Z","__v":0}]
+2024-11-03T04:21:49.591Z [info]: GET /api/comments/67255aa399ce844b7100235a 304 - 748ms
+2024-11-03T04:22:25.628Z [info]: GET /api/resumes/67255aa399ce844b7100235a 304 - 800ms
+2024-11-03T04:22:36.731Z [info]: GET /api/resumes?page=1&limit=10 304 - 1143ms
+2024-11-03T04:23:25.346Z [info]: Fetched comments: []
+2024-11-03T04:23:25.373Z [info]: GET /api/comments/671e4ddd7664b1bea9421ad9 404 - 401ms
+2024-11-03T04:23:25.754Z [info]: GET /api/resumes/671e4ddd7664b1bea9421ad9 200 - 782ms
+2024-11-03T04:23:31.478Z [info]: GET /api/auth/user/671da55a261a5239cf579e51 304 - 370ms
+2024-11-03T04:23:31.840Z [info]: GET /api/resumes/671e4ddd7664b1bea9421ad9 304 - 738ms
+2024-11-03T04:23:32.245Z [info]: Fetched comments: []
+2024-11-03T04:23:32.248Z [info]: GET /api/comments/671e4ddd7664b1bea9421ad9 404 - 374ms
+2024-11-03T04:23:38.702Z [info]: GET /api/resumes?page=1&limit=10 304 - 1114ms
+2024-11-03T04:23:42.555Z [info]: GET /api/resumes/67255aa399ce844b7100235a 304 - 730ms
+2024-11-03T04:23:42.567Z [info]: Fetched comments: [{"_id":"6726161cbb6d6ede5765e6b0","resumeId":"67255aa399ce844b7100235a","commenterId":{"_id":"671da55a261a5239cf579e51","username":"test123"},"content":"kkok","isDeleted":false,"createdAt":"2024-11-02T12:07:56.019Z","updatedAt":"2024-11-02T12:07:56.019Z","__v":0},{"_id":"6726173abb6d6ede5765e6dd","resumeId":"67255aa399ce844b7100235a","commenterId":{"_id":"671da55a261a5239cf579e51","username":"test123"},"content":"test","isDeleted":false,"createdAt":"2024-11-02T12:12:42.671Z","updatedAt":"2024-11-02T12:12:42.671Z","__v":0},{"_id":"6726f7aa0c5e0fd6f08f41e1","resumeId":"67255aa399ce844b7100235a","commenterId":{"_id":"671da55a261a5239cf579e51","username":"test123"},"content":"tEST4321","isDeleted":false,"createdAt":"2024-11-03T04:10:18.086Z","updatedAt":"2024-11-03T04:10:18.086Z","__v":0}]
+2024-11-03T04:23:42.598Z [info]: GET /api/comments/67255aa399ce844b7100235a 304 - 789ms
+2024-11-03T04:23:49.818Z [info]: GET /api/resumes?page=1&limit=10 304 - 1122ms
+2024-11-03T04:24:00.165Z [info]: Fetched comments: [{"_id":"671fe18b6b57bb660fcabb8a","resumeId":"671d67d3310578770bb76ede","commenterId":{"_id":"671da55a261a5239cf579e51","username":"test123"},"content":"good","isDeleted":false,"createdAt":"2024-10-28T19:10:03.563Z","updatedAt":"2024-10-28T19:10:03.563Z","__v":0},{"_id":"672636bfb9ee5f79a8d8ab74","resumeId":"671d67d3310578770bb76ede","commenterId":{"_id":"671da55a261a5239cf579e51","username":"test123"},"content":"Test4321","isDeleted":false,"createdAt":"2024-11-02T14:27:11.794Z","updatedAt":"2024-11-02T14:27:11.794Z","__v":0},{"_id":"67266a6e1f204886c8fc69d4","resumeId":"671d67d3310578770bb76ede","commenterId":{"_id":"671d676d310578770bb76edc","username":"mapassa"},"content":"Test!","isDeleted":false,"createdAt":"2024-11-02T18:07:42.104Z","updatedAt":"2024-11-02T18:07:42.104Z","__v":0}]
+2024-11-03T04:24:00.172Z [info]: GET /api/comments/671d67d3310578770bb76ede 200 - 733ms
+2024-11-03T04:24:00.200Z [info]: GET /api/resumes/671d67d3310578770bb76ede 200 - 757ms
+2024-11-03T04:24:19.237Z [info]: GET /api/auth/user/671da55a261a5239cf579e51 304 - 380ms
+2024-11-03T04:24:19.592Z [info]: GET /api/resumes/671d67d3310578770bb76ede 304 - 742ms
+2024-11-03T04:24:19.657Z [info]: GET /api/comments/671d67d3310578770bb76ede 304 - 10ms
+2024-11-03T04:24:59.667Z [info]: Fetched comments: []
+2024-11-03T04:24:59.668Z [info]: GET /api/comments/672636bfb9ee5f79a8d8ab74 404 - 375ms
+2024-11-03T04:25:33.935Z [info]: PUT /api/comments/671fe18b6b57bb660fcabb8a 404 - 4ms
+2024-11-03T17:31:27.439Z [info]: Server running on port 5000
+2024-11-03T17:31:37.696Z [info]: MongoDB Connected: resumefeedback-shard-00-02.xmgix.mongodb.net
+2024-11-03T17:32:29.441Z [info]: POST /api/auth/login 200 - 813ms
+2024-11-03T17:32:40.951Z [info]: GET /api/auth/user/671d676d310578770bb76edc 401 - 4ms
+2024-11-03T17:32:58.627Z [info]: GET /api/auth/user/671d676d310578770bb76edc 200 - 395ms
+2024-11-03T17:33:49.543Z [info]: GET /api/auth/users 404 - 5ms
+2024-11-03T17:33:58.016Z [info]: GET /api/auth/user 404 - 1ms
+2024-11-03T17:34:10.465Z [info]: GET /api/auth 404 - 1ms
+2024-11-03T17:35:08.367Z [info]: GET /api/admin/users 404 - 1ms
+2024-11-03T17:35:17.067Z [info]: GET /api/users 404 - 1ms
+2024-11-03T17:35:45.468Z [info]: GET /users 404 - 1ms
+2024-11-03T17:35:59.591Z [info]: GET /api/auth/users 404 - 1ms
+2024-11-03T17:36:08.399Z [info]: GET /api/admin/users 404 - 0ms
+2024-11-03T17:37:08.113Z [info]: GET /api/admin/users 404 - 3ms
+2024-11-03T17:37:15.187Z [info]: GET /api/auth/users 404 - 1ms

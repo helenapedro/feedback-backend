@@ -54,11 +54,11 @@ export const getCommentsByResume = async (req: Request, res: Response): Promise<
       return;
     }
 
-    comments.forEach(comment => { 
-      if (!comment.populated('commenterId')) { 
-        logger.warn(`Comment ${comment._id} failed to populate commenterId`); 
-      } 
-    });
+    comments.forEach(comment => {
+      if (comment.commenterId && typeof comment.populated === 'function' && !comment.populated('commenterId')) {
+        logger.warn(`Comment ${comment._id} failed to populate commenterId`);
+      }
+    });    
 
     const validComments = comments.filter(comment => {
       if (!comment.commenterId) {
