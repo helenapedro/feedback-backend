@@ -43,8 +43,7 @@ export const getCommentsByResume = async (req: Request, res: Response): Promise<
   }
 
   try {
-    const comments = await Comment.find({ resumeId, isDeleted: false })
-      .populate({ path: 'commenterId', select: 'username' });
+    const comments = await Comment.find({ resumeId, isDeleted: false }).populate({ path: 'commenterId', select: 'username' });
 
     logger.info(`Fetched comments: ${JSON.stringify(comments)}`);
 
@@ -61,7 +60,7 @@ export const getCommentsByResume = async (req: Request, res: Response): Promise<
       return true;
     });
 
-    setCache(resumeId, validComments);
+    //setCache(resumeId, validComments);
     res.status(200).json(validComments);
   } catch (error) { 
     if (error instanceof TypeError && error.message.includes('populated')) { 
