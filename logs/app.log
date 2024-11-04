@@ -203,3 +203,7 @@
 2024-11-03T21:32:45.871Z [info]: DELETE /api/comments/6726161cbb6d6ede5765e6b0 404 - 51ms
 2024-11-03T21:33:01.994Z [info]: DELETE /api/comments/comments/6726161cbb6d6ede5765e6b0 404 - 1ms
 2024-11-03T21:33:31.501Z [info]: Server running on port 5000
+2024-11-03T21:33:36.542Z [info]: MongoDB Connected: resumefeedback-shard-00-01.xmgix.mongodb.net
+2024-11-03T21:33:50.444Z [info]: DELETE /api/comments/comments/6726161cbb6d6ede5765e6b0 404 - 5ms
+2024-11-03T21:34:00.945Z [info]: DELETE /api/comments/6726161cbb6d6ede5765e6b0 200 - 767ms
+2024-11-03T21:34:07.251Z [info]: DELETE /api/comments/6726161cbb6d6ede5765e6b0 200 - 734ms
