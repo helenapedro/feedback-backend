@@ -44,6 +44,7 @@ export const getCommentsByResume = async (req: Request, res: Response): Promise<
 
   try {
     const comments = await Comment.find({ resumeId, isDeleted: false })
+      .sort({ createdAt: -1 })
       .populate({ path: 'commenterId', select: 'username' })
       .exec();
 
