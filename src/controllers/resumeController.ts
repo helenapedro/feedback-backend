@@ -40,7 +40,8 @@ export const getResumeById = async (req: RequestWithParams, res: Response): Prom
   const { id } = req.params;
 
   try {
-    const resume = await Resume.findById(id).populate('posterId', '-password');
+    const resume = await Resume.findById(id)
+      .populate('posterId', '-password');
 
     if (!resume) {
       res.status(404).json({ message: 'Resume not found' });
