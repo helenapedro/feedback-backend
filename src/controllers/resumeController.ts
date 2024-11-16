@@ -78,17 +78,24 @@ export const updateResumeDescription = async (req: AuthRequest, res: Response): 
   }
 
   try {
-    const resume = await Resume.findOneAndUpdate(
-      { _id: id, userId }, 
-      { description },
-      { new: true, runValidators: true } 
-    );
-
+    // Find the resume and verify authorization
+    const resume = await Resume.findById(id);
     if (!resume) {
-      logger.info('Resume not found or not authorized to update');
-      res.status(404).json({ message: 'Resume not found or not authorized to update' });
+      logger.info('Resume not found');
+      res.status(404).json({ message: 'Resume not found' });
       return;
     }
+
+    // Check if the user is authorized to update the description
+    if (resume.posterId.toString() !== userId) {
+      logger.info('Not authorized to update the resume');
+      res.status(403).json({ message: 'Not authorized to update this resume' });
+      return;
+    }
+
+    // Update the description
+    resume.description = description;
+    await resume.save();
 
     res.status(200).json({ message: 'Resume description updated successfully', resume });
   } catch (error) {
@@ -96,7 +103,6 @@ export const updateResumeDescription = async (req: AuthRequest, res: Response): 
     res.status(500).json({ message: 'Server error', error });
   }
 };
-
 
 export const getAllResumes = async (req: Request, res: Response): Promise<void> => {
   const { page = 1, limit = 10, format, createdAt } = req.query;
