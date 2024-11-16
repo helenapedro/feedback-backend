@@ -78,7 +78,6 @@ export const updateResumeDescription = async (req: AuthRequest, res: Response): 
   }
 
   try {
-    // Find the resume and verify authorization
     const resume = await Resume.findById(id);
     if (!resume) {
       logger.info('Resume not found');
@@ -86,7 +85,6 @@ export const updateResumeDescription = async (req: AuthRequest, res: Response): 
       return;
     }
 
-    // Check if the user is authorized to update the description
     if (resume.posterId.toString() !== userId) {
       logger.info('Not authorized to update the resume');
       res.status(403).json({ message: 'Not authorized to update this resume' });

@@ -3,7 +3,13 @@ import User from '../models/User';
 import { AuthRequest } from './auth';
 
 export const adminMiddleware = (req: AuthRequest, res: Response, next: NextFunction): void => {
-  User.findById(req.userId)
+  const userId = req.user?.userId;
+  
+  if (!userId) {
+    res.status(401).json({ message: 'Not authenticated' });
+  }
+
+  User.findById(userId)
     .then((user) => {
       if (!user || !user.isAdmin) {
         return res.status(403).json({ message: 'Access denied' });
