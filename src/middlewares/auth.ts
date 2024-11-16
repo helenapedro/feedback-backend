@@ -4,7 +4,10 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 export interface AuthRequest extends Request {
-  userId?: string;
+  user?: {
+    userId: string;
+    isAdmin: boolean;
+  };
 }
 
 export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction): void => {
@@ -21,8 +24,8 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
   }
 
   try {
-    const decoded = jwt.verify(token, jwtSecret) as { userId: string };
-    req.userId = decoded.userId;
+    const decoded = jwt.verify(token, jwtSecret) as { userId: string; isAdmin: boolean };
+    req.user = { userId: decoded.userId, isAdmin: decoded.isAdmin };
     next();
   } catch (error) {
     res.status(401).json({ message: 'Token is not valid' });

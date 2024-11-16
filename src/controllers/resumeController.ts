@@ -1,7 +1,7 @@
 import { AuthRequest } from '../middlewares/auth';
 import { Request ,Response } from 'express';
-import Resume from '../models/Resume';
-import { uploadToS3 } from '../services/s3Service';
+import Resume, {IResume} from '../models/Resume';
+import { uploadToS3, deleteFromS3 } from '../services/s3Service';
 import logger from '../helpers/logger';
 
 interface RequestWithParams extends Request {
@@ -16,18 +16,29 @@ export const uploadResume = async (req: AuthRequest, res: Response): Promise<voi
   if (!req.file) {
     res.status(400).json({ message: 'No file uploaded' });
     return;
-  } 
+  }
 
-  const posterId = req.userId;
-  
+  if (!req.user) {
+    res.status(401).json({ message: 'Not authenticated' });
+    return;
+  }
+
+  const posterId = req.user.userId;
+
+  if (description && description.length > 500) {
+    logger.info('Description is too long. Maximum length is 500 characters.');
+    res.status(400).json({ message: 'Description is too long. Maximum length is 500 characters.' });
+    return;
+  }
+
   try {
     const fileUrl = await uploadToS3(req.file);
-    
+
     const resume = await Resume.create({
       posterId,
       format,
       url: fileUrl,
-      description
+      description,
     });
 
     res.status(201).json(resume);
@@ -37,12 +48,12 @@ export const uploadResume = async (req: AuthRequest, res: Response): Promise<voi
   }
 };
 
+
 export const getResumeById = async (req: RequestWithParams, res: Response): Promise<void> => {
   const { id } = req.params;
 
   try {
-    const resume = await Resume.findById(id)
-      .populate('posterId', '-password');
+    const resume = await Resume.findById(id).populate('posterId', '-password');
 
     if (!resume) {
       res.status(404).json({ message: 'Resume not found' });
@@ -55,6 +66,34 @@ export const getResumeById = async (req: RequestWithParams, res: Response): Prom
     res.status(500).json({ message: 'Server error', error });
   }
 };
+
+export const updateResumeDescription = async (req: AuthRequest, res: Response): Promise<void> => {
+  const { id } = req.params;
+  const { description } = req.body;
+
+  try {
+    const resume = await Resume.findById(id);
+
+    if (!resume) {
+      res.status(404).json({ message: 'Resume not found' });
+      return;
+    }
+
+    if (!req.user || resume.posterId.toString() !== req.user.userId) {
+      res.status(403).json({ message: 'Not authorized to update this resume' });
+      return;
+    }
+
+    resume.description = description;
+    await resume.save();
+
+    res.status(200).json({ id, description: resume.description });
+  } catch (error) {
+    logger.error('Error updating resume description:', error);
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
 
 export const getAllResumes = async (req: Request, res: Response): Promise<void> => {
   const { page = 1, limit = 10, format, createdAt } = req.query;
@@ -94,20 +133,36 @@ export const getAllResumes = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-export const deleteResumeById = async (req: Request, res: Response): Promise<void> => {
+export const deleteResumeById = async (req: AuthRequest, res: Response): Promise<void> => {
   const { id } = req.params;
 
+  if (!req.user) {
+    res.status(401).json({ message: 'Not authenticated' });
+    return;
+  }
+
+  const { userId, isAdmin } = req.user;
+
   try {
-    const resume = await Resume.findByIdAndDelete(id);
+    const resume = await Resume.findById(id);
 
     if (!resume) {
       res.status(404).json({ message: 'Resume not found' });
       return;
     }
 
+    // Check authorization
+    if (resume.posterId.toString() !== userId && !isAdmin) {
+      res.status(403).json({ message: 'Not authorized to delete this resume' });
+      return;
+    }
+
+    await deleteFromS3(resume.url);
+    await Resume.findByIdAndDelete(id);
+
     res.status(200).json({ message: 'Resume deleted successfully' });
   } catch (error) {
-    logger.error("Error deleting resume:", error);
+    logger.error('Error deleting resume:', error);
     res.status(500).json({ message: 'Server error', error });
   }
 };

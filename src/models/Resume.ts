@@ -4,6 +4,7 @@ export interface IResume extends Document {
   posterId: mongoose.Types.ObjectId;
   format: string;
   url: string;
+  description?: string;
   createdAt: Date;
   updatedAt: Date;
 } 
