@@ -70,24 +70,27 @@ export const getResumeById = async (req: RequestWithParams, res: Response): Prom
 export const updateResumeDescription = async (req: AuthRequest, res: Response): Promise<void> => {
   const { id } = req.params;
   const { description } = req.body;
+  const userId = req.user?.userId;
+
+  if (!description) {
+    res.status(400).json({ message: 'Description is required' });
+    return;
+  }
 
   try {
-    const resume = await Resume.findById(id);
+    const resume = await Resume.findOneAndUpdate(
+      { _id: id, userId }, 
+      { description },
+      { new: true, runValidators: true } 
+    );
 
     if (!resume) {
-      res.status(404).json({ message: 'Resume not found' });
+      logger.info('Resume not found or not authorized to update');
+      res.status(404).json({ message: 'Resume not found or not authorized to update' });
       return;
     }
 
-    if (!req.user || resume.posterId.toString() !== req.user.userId) {
-      res.status(403).json({ message: 'Not authorized to update this resume' });
-      return;
-    }
-
-    resume.description = description;
-    await resume.save();
-
-    res.status(200).json({ id, description: resume.description });
+    res.status(200).json({ message: 'Resume description updated successfully', resume });
   } catch (error) {
     logger.error('Error updating resume description:', error);
     res.status(500).json({ message: 'Server error', error });

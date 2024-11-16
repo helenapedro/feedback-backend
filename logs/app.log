@@ -221,3 +221,5 @@
 2024-11-16T14:27:53.894Z [info]: GET /api/resumes/6738abbafc2198b89cbb8f34 401 - 3ms
 2024-11-16T14:28:16.802Z [info]: GET /api/resumes/6738abbafc2198b89cbb8f34 200 - 580ms
 2024-11-16T14:28:58.613Z [info]: GET /api/resumes 200 - 850ms
+2024-11-16T16:01:50.633Z [info]: Server running on port 5000
+2024-11-16T16:01:54.434Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net

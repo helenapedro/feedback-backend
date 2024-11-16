@@ -1,5 +1,5 @@
 import express from 'express';
-import { uploadResume, getResumeById, getAllResumes, deleteResumeById } from '../controllers/resumeController';
+import { uploadResume, getResumeById, getAllResumes, deleteResumeById, updateResumeDescription } from '../controllers/resumeController';
 import { authMiddleware, AuthRequest } from '../middlewares/auth';
 import { upload } from '../services/s3Service';
 import logger from '../helpers/logger';
@@ -30,5 +30,17 @@ router.get('/:id', authMiddleware, getResumeById);
 router.get('/', authMiddleware, getAllResumes);
 
 router.delete('/:id', authMiddleware, deleteResumeById);
+
+router.put(
+  '/:id/update-description',
+  authMiddleware,
+  async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
+    try {
+      await updateResumeDescription(req, res);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default router;
