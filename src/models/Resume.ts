@@ -24,6 +24,11 @@ const ResumeSchema: Schema = new Schema(
       type: String, 
       required: true 
     }, 
+    description: { 
+      type: String, 
+      required: false, 
+      maxlength: 500,
+    },
   },
   { timestamps: true }
 );

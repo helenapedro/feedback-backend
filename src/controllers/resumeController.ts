@@ -11,7 +11,7 @@ interface RequestWithParams extends Request {
 }
 
 export const uploadResume = async (req: AuthRequest, res: Response): Promise<void> => {
-  const { format } = req.body;
+  const { format, description } = req.body;
 
   if (!req.file) {
     res.status(400).json({ message: 'No file uploaded' });
@@ -27,6 +27,7 @@ export const uploadResume = async (req: AuthRequest, res: Response): Promise<voi
       posterId,
       format,
       url: fileUrl,
+      description
     });
 
     res.status(201).json(resume);
