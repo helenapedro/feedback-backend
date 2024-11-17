@@ -9,9 +9,14 @@ export const register = async (req: Request, res: Response): Promise<Response> =
   const { username, email, password, isAdmin } = req.body;
 
   try {
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
       return res.status(400).json({ message: 'User already exists' });
+    }
+
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername) {
+      return res.status(400).json({ message: 'This username is not available.' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -24,6 +29,7 @@ export const register = async (req: Request, res: Response): Promise<Response> =
     return res.status(500).json({ message: 'Server error', error });
   }
 };
+
 
 export const login = async (req: Request, res: Response): Promise<Response> => {
   const { email, password } = req.body;
