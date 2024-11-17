@@ -37,7 +37,7 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
   try {
     const user = await User.findOne({ email, isActive: true });
     if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials or you have deleted your account.' });
+      return res.status(400).json({ message: 'Invalid credentials or account is deactivated.' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -77,7 +77,6 @@ export const getUser = async (req: AuthRequest, res: Response): Promise<Response
   }
 };
 
-
 export const updateUser = async (req: AuthRequest, res: Response): Promise<Response> => {
   if (!req.user) {
     return res.status(401).json({ message: 'Unauthorized' });
@@ -87,6 +86,16 @@ export const updateUser = async (req: AuthRequest, res: Response): Promise<Respo
   const { username, email } = req.body;
 
   try {
+    const existingEmail = await User.findOne({ email, _id: { $ne: userId } });
+    if (existingEmail) {
+      return res.status(400).json({ message: 'A user with this email already exists.' });
+    }
+
+    const existingUsername = await User.findOne({ username, _id: { $ne: userId } });
+    if (existingUsername) {
+      return res.status(400).json({ message: 'This username is already taken.' });
+    }
+
     const user = await User.findOneAndUpdate(
       { _id: userId, isActive: true },
       { username, email },
@@ -94,16 +103,15 @@ export const updateUser = async (req: AuthRequest, res: Response): Promise<Respo
     ).select('-password');
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: 'User not found.' });
     }
 
     return res.status(200).json(user);
   } catch (error) {
     logger.error('Update User error:', error);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error', error });
   }
 };
-
 
 export const changePassword = async (req: AuthRequest, res: Response): Promise<Response> => {
   if (!req.user) {
@@ -155,7 +163,3 @@ export const deleteUser = async (req: AuthRequest, res: Response): Promise<Respo
     return res.status(500).json({ message: 'Server error' });
   }
 };
-
-
-
-
