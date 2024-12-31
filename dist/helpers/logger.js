@@ -1,17 +1,12 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const winston_1 = __importDefault(require("winston"));
-const logger = winston_1.default.createLogger({
+import winston from 'winston';
+const logger = winston.createLogger({
     level: 'info',
-    format: winston_1.default.format.combine(winston_1.default.format.timestamp(), winston_1.default.format.printf(({ timestamp, level, message }) => {
+    format: winston.format.combine(winston.format.timestamp(), winston.format.printf(({ timestamp, level, message }) => {
         return `${timestamp} [${level}]: ${message}`;
     })),
     transports: [
-        new winston_1.default.transports.Console(),
-        new winston_1.default.transports.File({ filename: 'logs/app.log' })
+        new winston.transports.Console(),
+        new winston.transports.File({ filename: 'logs/app.log' })
     ],
 });
-exports.default = logger;
+export default logger;

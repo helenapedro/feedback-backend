@@ -2,6 +2,7 @@
   "name": "feedback",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "mocha --require ts-node/register --extensions ts --recursive 'tests/**/*.test.ts'"
   },
@@ -22,7 +23,7 @@
     "feedback": "file:",
     "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.7.2",
+    "mongoose": "^8.9.3",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "node-cache": "^5.1.2",

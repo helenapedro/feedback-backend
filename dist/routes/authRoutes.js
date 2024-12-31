@@ -1,15 +1,23 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const authController_1 = require("../controllers/authController");
-const router = express_1.default.Router();
+import express from 'express';
+import { register, login, getUser, updateUser, deleteUser, changePassword } from '../controllers/authController';
+import { authMiddleware } from '../middlewares/auth';
+const router = express.Router();
 router.post('/register', (req, res, next) => {
-    (0, authController_1.register)(req, res).catch(next);
+    register(req, res).catch(next);
 });
 router.post('/login', (req, res, next) => {
-    (0, authController_1.login)(req, res).catch(next);
+    login(req, res).catch(next);
 });
-exports.default = router;
+router.get('/user/:userId', authMiddleware, (req, res, next) => {
+    getUser(req, res).catch(next);
+});
+router.put('/user/update', authMiddleware, (req, res, next) => {
+    updateUser(req, res).catch(next);
+});
+router.delete('/user/delete', authMiddleware, (req, res, next) => {
+    deleteUser(req, res).catch(next);
+});
+router.post('/user/change-password', authMiddleware, (req, res, next) => {
+    changePassword(req, res).catch(next);
+});
+export default router;
