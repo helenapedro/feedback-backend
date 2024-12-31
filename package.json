@@ -2,7 +2,6 @@
   "name": "feedback",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "test": "mocha --require ts-node/register --extensions ts --recursive 'tests/**/*.test.ts'"
   },
@@ -48,6 +47,7 @@
     "mocha": "^11.0.1",
     "sinon": "^19.0.2",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.6.3"
   }
 }

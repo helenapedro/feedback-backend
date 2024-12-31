@@ -5,6 +5,7 @@
     "target": "ES6",
     "outDir": "./dist",
     "rootDir": "./src",
+    "module": "CommonJS",
     "strict": true,
     "esModuleInterop": true,
     "typeRoots": ["node_modules/@types"], 
