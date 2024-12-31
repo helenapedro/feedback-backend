@@ -38,7 +38,6 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(morgan('dev'));
 app.use(helmet());
-app.use(cors());
 app.use(requestLogger);
 app.use(errorLogger);
 app.use(errorHandler);
