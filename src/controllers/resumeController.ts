@@ -2,7 +2,9 @@ import { AuthRequest } from '../middlewares/auth';
 import { Request ,Response } from 'express';
 import Resume, {IResume} from '../models/Resume';
 import { uploadToS3, deleteFromS3 } from '../services/s3Service';
+import { generateAIFeedback } from '../services/AIFeedbackGenerator';
 import logger from '../helpers/logger';
+import pdfParse from 'pdf-parse';
 
 interface RequestWithParams extends Request {
   params: {
@@ -34,12 +36,26 @@ export const uploadResume = async (req: AuthRequest, res: Response): Promise<voi
   try {
     const fileUrl = await uploadToS3(req.file);
 
-    const resume = await Resume.create({
+    let extractedText = "";
+    if (req.file.mimetype === 'application/pdf') {
+      const pdfData = await pdfParse(req.file.buffer);
+      extractedText = pdfData.text;
+    }
+
+    const resume: IResume = await Resume.create({
       posterId,
       format,
       url: fileUrl,
       description,
+      aiFeedback: "", // Will update after generating AI feedback
     });
+    
+    generateAIFeedback((resume._id as string).toString(), extractedText)
+      .then(async (feedback) => {
+        resume.aiFeedback = feedback;
+        await resume.save();
+    })
+    .catch((error) => logger.error("AI Feedback generation failed:", error));
 
     res.status(201).json(resume);
   } catch (error) {

@@ -7,6 +7,7 @@ export interface IResume extends Document {
   description?: string;
   createdAt: Date;
   updatedAt: Date;
+  aiFeedback: string;
 } 
 
 const ResumeSchema: Schema = new Schema(
@@ -30,6 +31,10 @@ const ResumeSchema: Schema = new Schema(
       required: false, 
       maxlength: 500,
     },
+    aiFeedback: {
+      type: String,
+      default: "" // feedback is always stored, even if empty initially
+    }
   },
   { timestamps: true }
 );

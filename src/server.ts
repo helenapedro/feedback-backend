@@ -19,7 +19,8 @@ const limiter = rateLimit(rateLimitConfig);
 const allowedOrigins = [
   'http://localhost:3000',
   'https://resumefeedback.mtcambrosio.com',
-  'https://master.d1cehne8ow0dq0.amplifyapp.com'
+  'https://master.d1cehne8ow0dq0.amplifyapp.com',
+  'https://preview--feedback-resume-garden.lovable.app',
 ];
 
 const corsOptions = {
