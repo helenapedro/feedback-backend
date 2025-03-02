@@ -20,7 +20,7 @@ const allowedOrigins = [
   'http://localhost:3000',
   'https://resumefeedback.mtcambrosio.com',
   'https://master.d1cehne8ow0dq0.amplifyapp.com',
-  'https://preview--feedback-resume-garden.lovable.app',
+  'https://preview--feedbackfrontend.lovable.app',
 ];
 
 const corsOptions = {

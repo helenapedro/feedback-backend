@@ -278,3 +278,5 @@
 2025-03-01T12:31:04.316Z [info]: GET /api/resumes 200 - 1258ms
 2025-03-01T12:32:07.705Z [info]: GET /api/resumes/6792697fc51d833592da74ab 401 - 11ms
 2025-03-01T12:32:28.838Z [info]: GET /api/resumes/6792697fc51d833592da74ab 200 - 820ms
+2025-03-01T12:41:30.756Z [info]: GET /api/resumes?page=1&limit=2 401 - 41ms
+2025-03-01T12:41:48.538Z [info]: GET /api/resumes?page=1&limit=2 200 - 1261ms
