@@ -18,9 +18,11 @@ const limiter = rateLimit(rateLimitConfig);
 
 const allowedOrigins = [
   'http://localhost:3000',
+  'http://localhost:8080',
   'https://resumefeedback.mtcambrosio.com',
   'https://master.d1cehne8ow0dq0.amplifyapp.com',
   'https://preview--feedbackfrontend.lovable.app',
+  'https://id-preview--8ff70115-1b8a-4b17-ab88-281e96dcb538.lovable.app'
 ];
 
 const corsOptions = {
