@@ -2,10 +2,12 @@ import { AuthRequest } from '../middlewares/auth';
 import { generateAIFeedback } from '../services/AIFeedbackGenerator';
 import { Request ,Response } from 'express';
 import Resume, {IResume} from '../models/Resume';
-import s3 from '../helpers/awsConfig';
 import { uploadToS3, deleteFromS3 } from '../services/s3Service';
 import { ListObjectVersionsCommand, CopyObjectCommand } from '@aws-sdk/client-s3';
 import { format } from 'date-fns';
+import s3 from '../helpers/awsConfig';
+import multer from 'multer';
+import path from 'path';
 import logger from '../helpers/logger';
 import pdfParse from 'pdf-parse';
 
@@ -14,6 +16,8 @@ interface RequestWithParams extends Request {
     id: string;
   };
 }
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 export const uploadResume = async (req: AuthRequest, res: Response): Promise<void> => {
   const { format, description } = req.body;
@@ -199,6 +203,16 @@ export const updateResume = async (req: AuthRequest, res: Response): Promise<voi
     if (description && description.length > 500) {
       res.status(400).json({ message: 'Description is too long. Maximum length is 500 characters.' });
       return;
+    }
+
+    if (req.file) {
+      const fileName = path.basename(resume.url);
+      const fileUrl = await uploadToS3(req.file, fileName);
+      if (fileUrl) {
+        resume.url = fileUrl;
+      } else {
+        throw new Error('File upload failed');
+      }
     }
 
     if (format) resume.format = format;

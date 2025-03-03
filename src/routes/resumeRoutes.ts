@@ -54,7 +54,7 @@ router.get('/:id/versions', authMiddleware, async (req: AuthRequest, res: expres
   }
 });
 
-router.put('/:id', authMiddleware, async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
+router.put('/:id', authMiddleware, upload.single('resume'), async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
   try {
     await updateResume(req, res);
   } catch (error) {

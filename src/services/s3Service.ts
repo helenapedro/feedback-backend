@@ -22,17 +22,17 @@ const formatDate = (date: Date) => {
   return `${year}-${month}-${day}`;
 };
 
-const uploadToS3 = async (file: Express.Multer.File) => {
+const uploadToS3 = async (file: Express.Multer.File, fileName?: string) => {
   const ext = path.extname(file.originalname);
   const formattedDate = formatDate(new Date());
   const uniqueId = uuidv4();
 
   const folderName = ['.pdf', '.docx'].includes(ext) ? 'pdf' : 'image';
-  const fileName = `${folderName}/resume_${formattedDate}_${uniqueId}${ext}`; 
+  const key = fileName || `${folderName}/resume_${formattedDate}_${uniqueId}${ext}`; 
   
   const uploadParams = {
     Bucket: BUCKET_NAME,
-    Key: fileName,
+    Key: key,
     Body: file.buffer,
     ContentType: file.mimetype,
   };
@@ -70,6 +70,5 @@ const deleteFromS3 = async (url: string): Promise<void> => {
     throw new Error('Failed to delete file from S3');
   }
 };
-
 
 export { upload, uploadToS3, deleteFromS3 };
