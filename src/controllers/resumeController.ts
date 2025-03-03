@@ -209,7 +209,8 @@ export const updateResume = async (req: AuthRequest, res: Response): Promise<voi
       const fileName = path.basename(resume.url);
       const fileUrl = await uploadToS3(req.file, fileName);
       if (fileUrl) {
-        resume.url = fileUrl;
+        // Append a timestamp to the URL to bypass the cache
+        resume.url = `${fileUrl}?t=${Date.now()}`;
       } else {
         throw new Error('File upload failed');
       }
