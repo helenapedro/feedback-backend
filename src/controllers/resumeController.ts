@@ -1,8 +1,10 @@
 import { AuthRequest } from '../middlewares/auth';
+import { generateAIFeedback } from '../services/AIFeedbackGenerator';
 import { Request ,Response } from 'express';
 import Resume, {IResume} from '../models/Resume';
+import s3 from '../helpers/awsConfig';
 import { uploadToS3, deleteFromS3 } from '../services/s3Service';
-import { generateAIFeedback } from '../services/AIFeedbackGenerator';
+import { ListObjectVersionsCommand } from '@aws-sdk/client-s3';
 import logger from '../helpers/logger';
 import pdfParse from 'pdf-parse';
 
@@ -83,41 +85,6 @@ export const getResumeById = async (req: RequestWithParams, res: Response): Prom
   }
 };
 
-export const updateResumeDescription = async (req: AuthRequest, res: Response): Promise<void> => {
-  const { id } = req.params;
-  const { description } = req.body;
-  const userId = req.user?.userId;
-
-  if (!description) {
-    res.status(400).json({ message: 'Description is required' });
-    return;
-  }
-
-  try {
-    const resume = await Resume.findById(id);
-    if (!resume) {
-      logger.info('Resume not found');
-      res.status(404).json({ message: 'Resume not found' });
-      return;
-    }
-
-    if (resume.posterId.toString() !== userId) {
-      logger.info('Not authorized to update the resume');
-      res.status(403).json({ message: 'Not authorized to update this resume' });
-      return;
-    }
-
-    // Update the description
-    resume.description = description;
-    await resume.save();
-
-    res.status(200).json({ message: 'Resume description updated successfully', resume });
-  } catch (error) {
-    logger.error('Error updating resume description:', error);
-    res.status(500).json({ message: 'Server error', error });
-  }
-};
-
 export const getAllResumes = async (req: Request, res: Response): Promise<void> => {
   const { page = 1, limit = 10, format, createdAt } = req.query;
   const maxLimit = 100; 
@@ -152,6 +119,86 @@ export const getAllResumes = async (req: Request, res: Response): Promise<void> 
     });
   } catch (error) {
     logger.error("Error fetching resumes:", error);
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
+export const listResumeVersions = async (req: AuthRequest, res: Response): Promise<void> => {
+  const { id } = req.params;
+
+  if (!req.user) {
+    res.status(401).json({ message: 'Not authenticated' });
+    return;
+  }
+
+  const { userId } = req.user;
+
+  try {
+    const resume = await Resume.findById(id);
+
+    if (!resume) {
+      res.status(404).json({ message: 'Resume not found' });
+      return;
+    }
+
+    if (resume.posterId.toString() !== userId) {
+      res.status(403).json({ message: 'Not authorized to view this resume' });
+      return;
+    }
+
+    const params = {
+      Bucket: 'feedback-fs',
+      Prefix: resume.url.replace('https://d1ldjxzzmwekb0.cloudfront.net/', ''),
+    };
+
+    const command = new ListObjectVersionsCommand(params);
+    const data = await s3.send(command);
+
+    const versions = data.Versions?.map(version => ({
+      versionId: version.VersionId,
+      lastModified: version.LastModified,
+      size: version.Size,
+      isLatest: version.IsLatest,
+    }));
+
+    res.status(200).json({ versions });
+  } catch (error) {
+    logger.error('Error listing resume versions:', error);
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
+export const updateResumeDescription = async (req: AuthRequest, res: Response): Promise<void> => {
+  const { id } = req.params;
+  const { description } = req.body;
+  const userId = req.user?.userId;
+
+  if (!description) {
+    res.status(400).json({ message: 'Description is required' });
+    return;
+  }
+
+  try {
+    const resume = await Resume.findById(id);
+    if (!resume) {
+      logger.info('Resume not found');
+      res.status(404).json({ message: 'Resume not found' });
+      return;
+    }
+
+    if (resume.posterId.toString() !== userId) {
+      logger.info('Not authorized to update the resume');
+      res.status(403).json({ message: 'Not authorized to update this resume' });
+      return;
+    }
+
+    // Update the description
+    resume.description = description;
+    await resume.save();
+
+    res.status(200).json({ message: 'Resume description updated successfully', resume });
+  } catch (error) {
+    logger.error('Error updating resume description:', error);
     res.status(500).json({ message: 'Server error', error });
   }
 };
