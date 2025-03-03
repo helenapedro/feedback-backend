@@ -5,6 +5,7 @@ import Resume, {IResume} from '../models/Resume';
 import s3 from '../helpers/awsConfig';
 import { uploadToS3, deleteFromS3 } from '../services/s3Service';
 import { ListObjectVersionsCommand } from '@aws-sdk/client-s3';
+import { format } from 'date-fns';
 import logger from '../helpers/logger';
 import pdfParse from 'pdf-parse';
 
@@ -154,12 +155,16 @@ export const listResumeVersions = async (req: AuthRequest, res: Response): Promi
     const command = new ListObjectVersionsCommand(params);
     const data = await s3.send(command);
 
-    const versions = data.Versions?.map(version => ({
-      versionId: version.VersionId,
-      lastModified: version.LastModified,
-      size: version.Size,
-      isLatest: version.IsLatest,
-    }));
+    const versions = data.Versions?.map(version => {
+      const lastModified = version.LastModified ? new Date(version.LastModified) : new Date();
+      return {
+        versionId: version.VersionId,
+        lastModified: version.LastModified,
+        size: version.Size,
+        isLatest: version.IsLatest,
+        name: `Version from ${format(lastModified, 'yyyy-MM-dd')}`
+      };
+    });
 
     res.status(200).json({ versions });
   } catch (error) {
