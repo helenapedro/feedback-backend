@@ -162,7 +162,7 @@ export const listResumeVersions = async (req: AuthRequest, res: Response): Promi
         lastModified: version.LastModified,
         size: version.Size,
         isLatest: version.IsLatest,
-        name: `Version from ${format(lastModified, 'yyyy-MM-dd')}`
+        name: `Resume version from ${format(lastModified, 'yyyy-MM-dd')}`
       };
     });
 
