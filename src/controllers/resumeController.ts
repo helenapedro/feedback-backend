@@ -173,6 +173,46 @@ export const listResumeVersions = async (req: AuthRequest, res: Response): Promi
   }
 };
 
+export const updateResume = async (req: AuthRequest, res: Response): Promise<void> => {
+  const { id } = req.params;
+  const { format, description } = req.body;
+  const userId = req.user?.userId;
+
+  if (!req.user) {
+    res.status(401).json({ message: 'Not authenticated' });
+    return;
+  }
+
+  try {
+    const resume = await Resume.findById(id);
+
+    if (!resume) {
+      res.status(404).json({ message: 'Resume not found' });
+      return;
+    }
+
+    if (resume.posterId.toString() !== userId) {
+      res.status(403).json({ message: 'Not authorized to update this resume' });
+      return;
+    }
+
+    if (description && description.length > 500) {
+      res.status(400).json({ message: 'Description is too long. Maximum length is 500 characters.' });
+      return;
+    }
+
+    if (format) resume.format = format;
+    if (description) resume.description = description;
+
+    await resume.save();
+
+    res.status(200).json({ message: 'Resume updated successfully', resume });
+  } catch (error) {
+    logger.error('Error updating resume:', error);
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
 export const updateResumeDescription = async (req: AuthRequest, res: Response): Promise<void> => {
   const { id } = req.params;
   const { description } = req.body;
