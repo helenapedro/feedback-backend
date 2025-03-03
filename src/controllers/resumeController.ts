@@ -4,7 +4,7 @@ import { Request ,Response } from 'express';
 import Resume, {IResume} from '../models/Resume';
 import s3 from '../helpers/awsConfig';
 import { uploadToS3, deleteFromS3 } from '../services/s3Service';
-import { ListObjectVersionsCommand } from '@aws-sdk/client-s3';
+import { ListObjectVersionsCommand, CopyObjectCommand } from '@aws-sdk/client-s3';
 import { format } from 'date-fns';
 import logger from '../helpers/logger';
 import pdfParse from 'pdf-parse';
@@ -204,6 +204,45 @@ export const updateResumeDescription = async (req: AuthRequest, res: Response): 
     res.status(200).json({ message: 'Resume description updated successfully', resume });
   } catch (error) {
     logger.error('Error updating resume description:', error);
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
+export const restoreResumeVersion = async (req: AuthRequest, res: Response): Promise<void> => {
+  const { id, versionId } = req.params;
+
+  if (!req.user) {
+    res.status(401).json({ message: 'Not authenticated' });
+    return;
+  }
+
+  const { userId } = req.user;
+
+  try {
+    const resume = await Resume.findById(id);
+
+    if (!resume) {
+      res.status(404).json({ message: 'Resume not found' });
+      return;
+    }
+
+    if (resume.posterId.toString() !== userId) {
+      res.status(403).json({ message: 'Not authorized to restore this resume' });
+      return;
+    }
+
+    const params = {
+      Bucket: 'feedback-fs',
+      CopySource: `feedback-fs/${resume.url.replace('https://d1ldjxzzmwekb0.cloudfront.net/', '')}?versionId=${versionId}`,
+      Key: resume.url.replace('https://d1ldjxzzmwekb0.cloudfront.net/', ''),
+    };
+
+    const command = new CopyObjectCommand(params);
+    await s3.send(command);
+
+    res.status(200).json({ message: 'Resume restored successfully' });
+  } catch (error) {
+    logger.error('Error restoring resume version:', error);
     res.status(500).json({ message: 'Server error', error });
   }
 };
