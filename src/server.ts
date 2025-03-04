@@ -22,7 +22,7 @@ const allowedOrigins = [
   'https://resumefeedback.mtcambrosio.com',
   'https://master.d1cehne8ow0dq0.amplifyapp.com',
   'https://preview--feedbackfrontend.lovable.app',
-  'https://id-preview--8ff70115-1b8a-4b17-ab88-281e96dcb538.lovable.app'
+  'https://8ff70115-1b8a-4b17-ab88-281e96dcb538.lovableproject.com'
 ];
 
 const corsOptions = {
