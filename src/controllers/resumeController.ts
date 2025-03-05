@@ -90,6 +90,24 @@ export const getResumeById = async (req: RequestWithParams, res: Response): Prom
   }
 };
 
+export const getUserResumes = async (req: AuthRequest, res: Response): Promise<void> => {
+  const userId = req.user?.userId;
+
+  if (!req.user) {
+    res.status(401).json({ message: 'Not authenticated' });
+    return;
+  }
+
+  try {
+    const resumes = await Resume.find({ posterId: userId }).populate('posterId', '-password');
+
+    res.status(200).json(resumes);
+  } catch (error) {
+    logger.error("Error fetching user resumes:", error);
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
 export const getAllResumes = async (req: Request, res: Response): Promise<void> => {
   const { page = 1, limit = 10, format, createdAt } = req.query;
   const maxLimit = 100; 

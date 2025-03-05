@@ -2,6 +2,7 @@ import express from 'express';
 import { 
   uploadResume, 
   getResumeById, 
+  getUserResumes,
   getAllResumes, 
   deleteResumeById, 
   updateResumeDescription, 
@@ -45,6 +46,7 @@ router.post('/:id/restore/:versionId', authMiddleware, async (req: AuthRequest, 
 router.get('/', authMiddleware, getAllResumes);
 
 router.get('/:id', authMiddleware, getResumeById);
+router.get('/user', authMiddleware, getUserResumes);
 
 router.get('/:id/versions', authMiddleware, async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
   try {
