@@ -5,6 +5,7 @@ import Resume, {IResume} from '../models/Resume';
 import { uploadToS3, deleteFromS3 } from '../services/s3Service';
 import { ListObjectVersionsCommand, CopyObjectCommand } from '@aws-sdk/client-s3';
 import { format } from 'date-fns';
+import mongoose from 'mongoose';
 import s3 from '../helpers/awsConfig';
 import multer from 'multer';
 import path from 'path';
@@ -99,6 +100,11 @@ export const getUserResumes = async (req: AuthRequest, res: Response): Promise<v
   }
 
   try {
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+      res.status(400).json({ message: 'Invalid user ID' });
+      return;
+    }
+
     const resumes = await Resume.find({ posterId: userId }).populate('posterId', '-password');
 
     res.status(200).json(resumes);
