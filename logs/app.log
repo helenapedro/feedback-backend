@@ -287,3 +287,31 @@
 2025-03-03T15:49:17.277Z [info]: GET /api/resumes/67c425692854592f27a3b92b/versions 200 - 9183ms
 2025-03-03T15:49:53.655Z [info]: GET /api/resumes/67c425692854592f27a3b92b 401 - 4ms
 2025-03-03T15:50:23.834Z [info]: GET /api/resumes/67c425692854592f27a3b92b 200 - 2310ms
+2025-03-05T03:18:24.107Z [info]: Server running on port 5000
+2025-03-05T03:18:29.586Z [info]: MongoDB Connected: resumefeedback-shard-00-02.xmgix.mongodb.net
+2025-03-05T03:18:39.854Z [info]: POST /api/auth/login 200 - 512ms
+2025-03-05T03:19:48.906Z [error]: Error fetching resume by ID: Cast to ObjectId failed for value "user" (type string) at path "_id" for model "Resume"
+2025-03-05T03:19:48.908Z [info]: GET /api/resumes/user 500 - 20ms
+2025-03-05T03:21:58.940Z [info]: Server running on port 5000
+2025-03-05T03:22:04.295Z [info]: MongoDB Connected: resumefeedback-shard-00-02.xmgix.mongodb.net
+2025-03-05T03:22:31.736Z [error]: Error fetching resume by ID: Cast to ObjectId failed for value "user" (type string) at path "_id" for model "Resume"
+2025-03-05T03:22:31.745Z [info]: GET /api/resumes/user 500 - 31ms
+2025-03-05T03:22:36.046Z [error]: Error fetching resume by ID: Cast to ObjectId failed for value "user" (type string) at path "_id" for model "Resume"
+2025-03-05T03:22:36.049Z [info]: GET /api/resumes/user 500 - 5ms
+2025-03-05T03:26:10.136Z [info]: Server running on port 5000
+2025-03-05T03:26:15.268Z [info]: MongoDB Connected: resumefeedback-shard-00-01.xmgix.mongodb.net
+2025-03-05T03:26:17.465Z [error]: Error fetching resume by ID: Cast to ObjectId failed for value "user" (type string) at path "_id" for model "Resume"
+2025-03-05T03:26:17.472Z [info]: GET /api/resumes/user 500 - 29ms
+2025-03-05T03:26:27.185Z [error]: Error fetching resume by ID: Cast to ObjectId failed for value "user" (type string) at path "_id" for model "Resume"
+2025-03-05T03:26:27.188Z [info]: GET /api/resumes/user 500 - 6ms
+2025-03-05T03:28:54.036Z [info]: Server running on port 5000
+2025-03-05T03:28:58.051Z [error]: Error fetching resume by ID: Cast to ObjectId failed for value "user" (type string) at path "_id" for model "Resume"
+2025-03-05T03:28:58.058Z [info]: GET /api/resumes/user 500 - 25ms
+2025-03-05T03:28:59.426Z [info]: MongoDB Connected: resumefeedback-shard-00-02.xmgix.mongodb.net
+2025-03-05T03:29:05.806Z [info]: GET /api/resumes/user 401 - 2ms
+2025-03-05T03:29:13.926Z [error]: Error fetching resume by ID: Cast to ObjectId failed for value "user" (type string) at path "_id" for model "Resume"
+2025-03-05T03:29:13.928Z [info]: GET /api/resumes/user 500 - 4ms
+2025-03-05T03:36:49.057Z [info]: Server running on port 5000
+2025-03-05T03:36:54.056Z [error]: Error fetching resume by ID: Cast to ObjectId failed for value "user" (type string) at path "_id" for model "Resume"
+2025-03-05T03:36:54.064Z [info]: GET /api/resumes/user 500 - 26ms
+2025-03-05T03:36:54.390Z [info]: MongoDB Connected: resumefeedback-shard-00-02.xmgix.mongodb.net

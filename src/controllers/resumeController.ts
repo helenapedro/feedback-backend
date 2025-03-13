@@ -92,25 +92,34 @@ export const getResumeById = async (req: RequestWithParams, res: Response): Prom
 };
 
 export const getUserResumes = async (req: AuthRequest, res: Response): Promise<void> => {
-  const userId = req.user?.userId;
-
-  if (!req.user) {
+  // Ensure the request is authenticated and contains user data
+  if (!req.user || !req.user.userId) {
     res.status(401).json({ message: 'Not authenticated' });
     return;
   }
 
-  try {
-    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-      res.status(400).json({ message: 'Invalid user ID' });
-      return;
-    }
+  const { userId } = req.user;
 
+  // Validate the format of the userId
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    res.status(400).json({ message: 'Invalid user ID format' });
+    return;
+  }
+
+  try {
+    // Query for resumes using the valid userId
     const resumes = await Resume.find({ posterId: userId }).populate('posterId', '-password');
 
+    // Send a success response with the resumes
     res.status(200).json(resumes);
   } catch (error) {
-    logger.error("Error fetching user resumes:", error);
-    res.status(500).json({ message: 'Server error', error });
+    // Handle CastError or other possible errors
+    if (error instanceof mongoose.Error.CastError) {
+      res.status(400).json({ message: 'Invalid user ID format' });
+    } else {
+      logger.error("Error fetching user resumes:", error);
+      res.status(500).json({ message: 'Server error', error });
+    }
   }
 };
 
