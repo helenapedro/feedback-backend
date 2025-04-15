@@ -1,15 +1,7 @@
 import express from 'express';
-import { 
-  uploadResume, 
-  getResumeById, 
-  getUserResumes,
-  getAllResumes, 
-  deleteResumeById, 
-  updateResumeDescription, 
-  listResumeVersions, 
-  restoreResumeVersion, 
-  updateResume 
-} from '../controllers/resumeController';
+import { uploadResume } from '../controllers/uploadController';
+import * as resumeController from '../controllers/resumeController';
+import { listResumeVersions, restoreResumeVersion } from '../controllers/versionController';
 import { authMiddleware, AuthRequest } from '../middlewares/auth';
 import { upload } from '../services/s3Service';
 import logger from '../helpers/logger';
@@ -35,18 +27,14 @@ router.post(
   }
 );
 
-router.post('/:id/restore/:versionId', authMiddleware, async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
-  try {
-    await restoreResumeVersion(req, res);
-  } catch (error) {
-    next(error);
-  }
-});
+// Get User's Resume
+router.get('/', authMiddleware, resumeController.getResume);
 
-router.get('/', authMiddleware, getAllResumes);
+// Get All Resumes (with filters)
+router.get('/all', authMiddleware, resumeController.getAllResumes);
 
-router.get('/:id', authMiddleware, getResumeById);
-router.get('/user', authMiddleware, getUserResumes);
+// Get Resume by ID
+router.get('/:id', authMiddleware, resumeController.getResumeDetails);
 
 router.get('/:id/versions', authMiddleware, async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
   try {
@@ -56,26 +44,34 @@ router.get('/:id/versions', authMiddleware, async (req: AuthRequest, res: expres
   }
 });
 
-router.put('/:id', authMiddleware, upload.single('resume'), async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
+router.put('/', authMiddleware, upload.single('resume'), async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
   try {
-    await updateResume(req, res);
+    await resumeController.updateResume(req, res);
   } catch (error) {
     next(error);
   }
 });
 
 router.put(
-  '/:id/update-description',
+  '/update-description',
   authMiddleware,
   async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
     try {
-      await updateResumeDescription(req, res);
+      await resumeController.updateResumeDescription(req, res);
     } catch (error) {
       next(error);
     }
   }
 );
 
-router.delete('/:id', authMiddleware, deleteResumeById);
+router.post('/:id/restore/:versionId', authMiddleware, async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
+  try {
+    await restoreResumeVersion(req, res);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete('/', authMiddleware, resumeController.deleteResume);
 
 export default router;

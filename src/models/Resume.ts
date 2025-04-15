@@ -1,13 +1,15 @@
 import mongoose, { Schema, Document } from 'mongoose';
+import { IUser } from './User';
 
 export interface IResume extends Document {
-  posterId: mongoose.Types.ObjectId;
-  format: string;
-  url: string;
+  posterId: IUser['_id'];
+  format?: string;
+  url?: string;
+  s3Key?: string | null; // S3 key for the file, if applicable
   description?: string;
+  aiFeedback: string;
   createdAt: Date;
   updatedAt: Date;
-  aiFeedback: string;
 } 
 
 const ResumeSchema: Schema = new Schema(
@@ -29,7 +31,7 @@ const ResumeSchema: Schema = new Schema(
     description: { 
       type: String, 
       required: false, 
-      maxlength: 500,
+      maxlength: 500, // Limit description to 500 characters for concise summaries.
     },
     aiFeedback: {
       type: String,

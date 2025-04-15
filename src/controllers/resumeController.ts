@@ -1,133 +1,40 @@
 import { AuthRequest } from '../middlewares/auth';
-import { generateAIFeedback } from '../services/AIFeedbackGenerator';
-import { Request ,Response } from 'express';
-import Resume, {IResume} from '../models/Resume';
-import { uploadToS3, deleteFromS3 } from '../services/s3Service';
-import { ListObjectVersionsCommand, CopyObjectCommand } from '@aws-sdk/client-s3';
-import { format } from 'date-fns';
-import mongoose from 'mongoose';
-import s3 from '../helpers/awsConfig';
-import multer from 'multer';
-import path from 'path';
-import logger from '../helpers/logger';
-import pdfParse from 'pdf-parse';
+import { Request, Response } from 'express';
+import * as validation from '../helpers/validation';
+import * as resumeService from '../services/resumeService';
+import * as errorHandler from '../middlewares/errorHandler';
 
-interface RequestWithParams extends Request {
-  params: {
-    id: string;
-  };
-}
-
-const upload = multer({ storage: multer.memoryStorage() });
-
-export const uploadResume = async (req: AuthRequest, res: Response): Promise<void> => {
-  const { format, description } = req.body;
-
-  if (!req.file) {
-    res.status(400).json({ message: 'No file uploaded' });
-    return;
-  }
-
-  if (!req.user) {
-    res.status(401).json({ message: 'Not authenticated' });
-    return;
-  }
-
-  const posterId = req.user.userId;
-
-  if (description && description.length > 500) {
-    logger.info('Description is too long. Maximum length is 500 characters.');
-    res.status(400).json({ message: 'Description is too long. Maximum length is 500 characters.' });
-    return;
-  }
-
-  try {
-    const fileUrl = await uploadToS3(req.file);
-
-    let extractedText = "";
-    if (req.file.mimetype === 'application/pdf') {
-      const pdfData = await pdfParse(req.file.buffer);
-      extractedText = pdfData.text;
-    }
-
-    const resume: IResume = await Resume.create({
-      posterId,
-      format,
-      url: fileUrl,
-      description,
-      aiFeedback: "", // Will update after generating AI feedback
-    });
-    
-    generateAIFeedback((resume._id as string).toString(), extractedText)
-      .then(async (feedback) => {
-        resume.aiFeedback = feedback;
-        await resume.save();
-    })
-    .catch((error) => logger.error("AI Feedback generation failed:", error));
-
-    res.status(201).json(resume);
-  } catch (error) {
-    logger.error("Error uploading resume:", error);
-    res.status(500).json({ message: 'Server error', error });
-  }
-};
-
-
-export const getResumeById = async (req: RequestWithParams, res: Response): Promise<void> => {
-  const { id } = req.params;
-
-  try {
-    const resume = await Resume.findById(id).populate('posterId', '-password');
-
-    if (!resume) {
-      res.status(404).json({ message: 'Resume not found' });
-      return;
-    }
-
-    res.status(200).json(resume);
-  } catch (error) {
-    logger.error("Error fetching resume by ID:", error);
-    res.status(500).json({ message: 'Server error', error });
-  }
-};
-
-export const getUserResumes = async (req: AuthRequest, res: Response): Promise<void> => {
-  // Ensure the request is authenticated and contains user data
+// This controller is designed to retrieve a single resume associated with the currently authenticated user.
+// It's intended for users to access their own resume.
+export const getResume = async (req: AuthRequest, res: Response): Promise<void> => {
   if (!req.user || !req.user.userId) {
-    res.status(401).json({ message: 'Not authenticated' });
+    errorHandler.handleAuthError(res);
     return;
   }
 
   const { userId } = req.user;
 
-  // Validate the format of the userId
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
-    res.status(400).json({ message: 'Invalid user ID format' });
-    return;
-  }
-
   try {
-    // Query for resumes using the valid userId
-    const resumes = await Resume.find({ posterId: userId }).populate('posterId', '-password');
+    const resume = await resumeService.findResumesByUser(userId);
 
-    // Send a success response with the resumes
-    res.status(200).json(resumes);
-  } catch (error) {
-    // Handle CastError or other possible errors
-    if (error instanceof mongoose.Error.CastError) {
-      res.status(400).json({ message: 'Invalid user ID format' });
-    } else {
-      logger.error("Error fetching user resumes:", error);
-      res.status(500).json({ message: 'Server error', error });
+    if (!resume || resume.length === 0) {
+      errorHandler.handleNotFound(res, 'Resume not found');
+      return;
     }
+
+    res.status(200).json(resume[0]); // Return the first resume
+  } catch (error) {
+    errorHandler.handleServerError(res, error, 'Error fetching resume');
   }
 };
 
+// This controller is designed to retrieve a list of all resumes, with optional filtering, pagination, and sorting.
+// It's intended for administrative or management purposes where all resumes need to be accessed.
+// The controller supports filtering by format and creation date, as well as pagination and sorting by creation date.
 export const getAllResumes = async (req: Request, res: Response): Promise<void> => {
   const { page = 1, limit = 10, format, createdAt } = req.query;
-  const maxLimit = 100; 
-
-  const effectiveLimit = Math.min(Number(limit) || 10, maxLimit); 
+  const maxLimit = 100;
+  const effectiveLimit = Math.min(Number(limit) || 10, maxLimit);
 
   try {
     const filters: any = {};
@@ -139,15 +46,10 @@ export const getAllResumes = async (req: Request, res: Response): Promise<void> 
       const nextDay = new Date(date);
       nextDay.setDate(date.getDate() + 1);
       filters.createdAt = { $gte: date, $lt: nextDay };
-    } 
+    }
 
-    const resumes = await Resume.find(filters)
-      .sort({ createdAt: -1 })
-      .skip((Number(page) - 1) * effectiveLimit)
-      .limit(effectiveLimit)
-      .populate('posterId', '-password');
-
-    const totalResumes = await Resume.countDocuments(filters);
+    const resumes = await resumeService.findResumesWithFilters(filters, Number(page), effectiveLimit);
+    const totalResumes = await resumeService.countResumesWithFilters(filters);
 
     res.status(200).json({
       totalResumes,
@@ -156,215 +58,126 @@ export const getAllResumes = async (req: Request, res: Response): Promise<void> 
       resumes,
     });
   } catch (error) {
-    logger.error("Error fetching resumes:", error);
-    res.status(500).json({ message: 'Server error', error });
+    errorHandler.handleServerError(res, error, 'Error fetching resumes with filters');
   }
 };
 
-export const listResumeVersions = async (req: AuthRequest, res: Response): Promise<void> => {
+export const getResumeDetails = async (req: AuthRequest, res: Response): Promise<void> => {
   const { id } = req.params;
 
-  if (!req.user) {
-    res.status(401).json({ message: 'Not authenticated' });
+  if (!req.user || !req.user.userId) {
+    errorHandler.handleAuthError(res);
     return;
   }
 
-  const { userId } = req.user;
-
   try {
-    const resume = await Resume.findById(id);
+    const resume = await resumeService.findResumeById(id);
 
     if (!resume) {
-      res.status(404).json({ message: 'Resume not found' });
+      errorHandler.handleNotFound(res, 'Resume not found');
       return;
     }
 
-    if (resume.posterId.toString() !== userId) {
-      res.status(403).json({ message: 'Not authorized to view this resume' });
-      return;
-    }
-
-    const params = {
-      Bucket: 'feedback-fs',
-      Prefix: resume.url.replace('https://d1ldjxzzmwekb0.cloudfront.net/', ''),
-    };
-
-    const command = new ListObjectVersionsCommand(params);
-    const data = await s3.send(command);
-
-    const versions = data.Versions?.map(version => {
-      const lastModified = version.LastModified ? new Date(version.LastModified) : new Date();
-      return {
-        versionId: version.VersionId,
-        lastModified: version.LastModified,
-        size: version.Size,
-        isLatest: version.IsLatest,
-        name: `Resume version from ${format(lastModified, 'yyyy-MM-dd')}`
-      };
-    });
-
-    res.status(200).json({ versions });
+    res.status(200).json(resume);
   } catch (error) {
-    logger.error('Error listing resume versions:', error);
-    res.status(500).json({ message: 'Server error', error });
+    errorHandler.handleServerError(res, error, 'Error fetching resume details');
   }
 };
 
 export const updateResume = async (req: AuthRequest, res: Response): Promise<void> => {
-  const { id } = req.params;
   const { format, description } = req.body;
-  const userId = req.user?.userId;
 
-  if (!req.user) {
-    res.status(401).json({ message: 'Not authenticated' });
-    return;
-  }
-
-  try {
-    const resume = await Resume.findById(id);
-
-    if (!resume) {
-      res.status(404).json({ message: 'Resume not found' });
-      return;
-    }
-
-    if (resume.posterId.toString() !== userId) {
-      res.status(403).json({ message: 'Not authorized to update this resume' });
-      return;
-    }
-
-    if (description && description.length > 500) {
-      res.status(400).json({ message: 'Description is too long. Maximum length is 500 characters.' });
-      return;
-    }
-
-    if (req.file) {
-      const fileName = path.basename(resume.url);
-      const fileUrl = await uploadToS3(req.file, fileName);
-      if (fileUrl) {
-        // Append a timestamp to the URL to bypass the cache
-        resume.url = `${fileUrl}?t=${Date.now()}`;
-      } else {
-        throw new Error('File upload failed');
-      }
-    }
-
-    if (format) resume.format = format;
-    if (description) resume.description = description;
-
-    await resume.save();
-
-    res.status(200).json({ message: 'Resume updated successfully', resume });
-  } catch (error) {
-    logger.error('Error updating resume:', error);
-    res.status(500).json({ message: 'Server error', error });
-  }
-};
-
-export const updateResumeDescription = async (req: AuthRequest, res: Response): Promise<void> => {
-  const { id } = req.params;
-  const { description } = req.body;
-  const userId = req.user?.userId;
-
-  if (!description) {
-    res.status(400).json({ message: 'Description is required' });
-    return;
-  }
-
-  try {
-    const resume = await Resume.findById(id);
-    if (!resume) {
-      logger.info('Resume not found');
-      res.status(404).json({ message: 'Resume not found' });
-      return;
-    }
-
-    if (resume.posterId.toString() !== userId) {
-      logger.info('Not authorized to update the resume');
-      res.status(403).json({ message: 'Not authorized to update this resume' });
-      return;
-    }
-
-    // Update the description
-    resume.description = description;
-    await resume.save();
-
-    res.status(200).json({ message: 'Resume description updated successfully', resume });
-  } catch (error) {
-    logger.error('Error updating resume description:', error);
-    res.status(500).json({ message: 'Server error', error });
-  }
-};
-
-export const restoreResumeVersion = async (req: AuthRequest, res: Response): Promise<void> => {
-  const { id, versionId } = req.params;
-
-  if (!req.user) {
-    res.status(401).json({ message: 'Not authenticated' });
+  if (!req.user || !req.user.userId) {
+    errorHandler.handleAuthError(res);
     return;
   }
 
   const { userId } = req.user;
 
   try {
-    const resume = await Resume.findById(id);
+    let resume = await resumeService.findResumesByUser(userId);
 
-    if (!resume) {
-      res.status(404).json({ message: 'Resume not found' });
+    if (!resume || resume.length === 0) {
+      // If no resume exists, create a new one
+      const newResume = await resumeService.createResume(userId, format, description, req.file);
+      if (!newResume) {
+        res.status(500).json({ message: 'Failed to create resume' });
+        return;
+      }
+      res.status(201).json({ message: 'Resume created successfully', resume: newResume });
       return;
     }
 
-    if (resume.posterId.toString() !== userId) {
-      res.status(403).json({ message: 'Not authorized to restore this resume' });
+    if (description && !validation.validateDescriptionLength(description)) {
+      errorHandler.handleInvalidInputError(res, 'Description exceeds maximum length of 500 characters');
       return;
     }
 
-    const params = {
-      Bucket: 'feedback-fs',
-      CopySource: `feedback-fs/${resume.url.replace('https://d1ldjxzzmwekb0.cloudfront.net/', '')}?versionId=${versionId}`,
-      Key: resume.url.replace('https://d1ldjxzzmwekb0.cloudfront.net/', ''),
-    };
+    const updatedResume = await resumeService.updateResumeData(
+      resume[0]._id as string,
+      format,
+      description,
+      req.file,
+    );
+    if (!updatedResume) {
+      res.status(500).json({ message: 'Failed to update resume' });
+      return;
+    }
 
-    const command = new CopyObjectCommand(params);
-    await s3.send(command);
-
-    res.status(200).json({ message: 'Resume restored successfully' });
+    res.status(200).json({ message: 'Resume updated successfully', resume: updatedResume });
   } catch (error) {
-    logger.error('Error restoring resume version:', error);
-    res.status(500).json({ message: 'Server error', error });
+    errorHandler.handleServerError(res, error, 'Error updating resume');
   }
 };
 
-export const deleteResumeById = async (req: AuthRequest, res: Response): Promise<void> => {
-  const { id } = req.params;
+export const updateResumeDescription = async (req: AuthRequest, res: Response): Promise<void> => {
+  const { description } = req.body;
 
-  if (!req.user) {
-    res.status(401).json({ message: 'Not authenticated' });
+  if (!req.user || !req.user.userId) {
+    errorHandler.handleAuthError(res);
     return;
   }
 
-  const { userId, isAdmin } = req.user;
+  const { userId } = req.user;
+
+  if (!description) {
+    errorHandler.handleInvalidInputError(res, 'Description is required');
+    return;
+  }
 
   try {
-    const resume = await Resume.findById(id);
-
-    if (!resume) {
-      res.status(404).json({ message: 'Resume not found' });
+    const resume = await resumeService.findResumesByUser(userId);
+    if (!resume || resume.length === 0) {
+      errorHandler.handleNotFound(res, 'Resume not found');
       return;
     }
 
-    // Check authorization
-    if (resume.posterId.toString() !== userId && !isAdmin) {
-      res.status(403).json({ message: 'Not authorized to delete this resume' });
+    resume[0].description = description;
+    await resume[0].save();
+    res.status(200).json({ message: 'Resume description updated successfully', resume: resume[0] });
+  } catch (error) {
+    errorHandler.handleServerError(res, error, 'Error updating resume description');
+  }
+};
+
+export const deleteResume = async (req: AuthRequest, res: Response): Promise<void> => {
+  if (!req.user || !req.user.userId) {
+    errorHandler.handleAuthError(res);
+    return;
+  }
+
+  const { userId } = req.user;
+
+  try {
+    const resume = await resumeService.findResumesByUser(userId);
+    if (!resume || resume.length === 0) {
+      errorHandler.handleNotFound(res, 'Resume not found');
       return;
     }
 
-    await deleteFromS3(resume.url);
-    await Resume.findByIdAndDelete(id);
-
+    await resumeService.deleteResumeData(resume[0]._id as string);
     res.status(200).json({ message: 'Resume deleted successfully' });
   } catch (error) {
-    logger.error('Error deleting resume:', error);
-    res.status(500).json({ message: 'Server error', error });
+    errorHandler.handleServerError(res, error, 'Error deleting resume');
   }
 };

@@ -315,3 +315,175 @@
 2025-03-05T03:36:54.056Z [error]: Error fetching resume by ID: Cast to ObjectId failed for value "user" (type string) at path "_id" for model "Resume"
 2025-03-05T03:36:54.064Z [info]: GET /api/resumes/user 500 - 26ms
 2025-03-05T03:36:54.390Z [info]: MongoDB Connected: resumefeedback-shard-00-02.xmgix.mongodb.net
+2025-04-14T16:39:24.126Z [info]: Server running on port 5000
+2025-04-14T16:39:29.686Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
+2025-04-14T16:44:33.027Z [info]: Server running on port 5000
+2025-04-14T16:44:35.847Z [info]: MongoDB Connected: resumefeedback-shard-00-02.xmgix.mongodb.net
+2025-04-14T16:45:53.437Z [info]: GET /api/resumes 401 - 33ms
+2025-04-14T16:46:03.502Z [info]: POST /api/auth/login 200 - 427ms
+2025-04-14T16:46:34.085Z [info]: GET /api/resumes 200 - 836ms
+2025-04-14T16:47:53.716Z [info]: Resume not found
+2025-04-14T16:47:53.718Z [info]: GET /api/resumes/67c425692854592f27a3b92b 404 - 261ms
+2025-04-14T16:48:11.464Z [info]: GET /api/resumes/67f82a74bdb4c11772bcd19b 200 - 528ms
+2025-04-14T16:49:14.070Z [info]: GET /api/resumes?page=1&limit=2 200 - 776ms
+2025-04-14T16:49:34.782Z [info]: GET /api/resumes/user 401 - 2ms
+2025-04-14T16:49:42.458Z [error]: Error fetching resume by ID Cast to ObjectId failed for value "user" (type string) at path "_id" for model "Resume"
+2025-04-14T16:49:42.460Z [info]: GET /api/resumes/user 500 - 18ms
+2025-04-14T16:50:16.710Z [info]: GET /api/resumes 200 - 772ms
+2025-04-14T16:50:35.967Z [info]: GET /api/resumes/67f82a74bdb4c11772bcd19b/versions 200 - 3391ms
+2025-04-14T16:59:28.276Z [info]: Not authorized
+2025-04-14T16:59:28.282Z [info]: PUT /api/resumes/67f82a74bdb4c11772bcd19b 403 - 588ms
+2025-04-14T16:59:40.408Z [info]: POST /api/auth/login 200 - 370ms
+2025-04-14T17:00:03.313Z [info]: Not authorized
+2025-04-14T17:00:03.315Z [info]: PUT /api/resumes/67f82a74bdb4c11772bcd19b 403 - 515ms
+2025-04-14T17:01:00.753Z [error]: Error fetching resume by ID Cast to ObjectId failed for value "user" (type string) at path "_id" for model "Resume"
+2025-04-14T17:01:00.755Z [info]: GET /api/resumes/user 500 - 8ms
+2025-04-14T18:58:02.036Z [info]: Server running on port 5000
+2025-04-14T18:58:07.385Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
+2025-04-14T18:58:17.499Z [info]: POST /api/auth/login 200 - 407ms
+2025-04-14T18:58:39.784Z [info]: GET /api/resumes 200 - 809ms
+2025-04-14T19:06:27.275Z [info]: Server running on port 5000
+2025-04-14T19:06:30.100Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
+2025-04-14T19:07:19.857Z [info]: GET /api/resumes 200 - 594ms
+2025-04-14T19:09:26.954Z [info]: GET /api/resumes/all 200 - 809ms
+2025-04-14T19:09:48.700Z [info]: GET /api/resumes 200 - 505ms
+2025-04-14T19:10:21.505Z [info]: GET /api/resumes 200 - 519ms
+2025-04-14T19:11:49.163Z [info]: GET /api/resumes/67f82a74bdb4c11772bcd19b/versions 401 - 4ms
+2025-04-14T19:12:17.930Z [info]: GET /api/resumes/67f82a74bdb4c11772bcd19b/versions 200 - 1607ms
+2025-04-14T19:13:22.633Z [info]: GET /api/resumes 200 - 547ms
+2025-04-14T19:13:53.107Z [info]: File uploaded successfully to S3: resume_2025-04-10_aeb371c7-c604-40df-ad06-79453ec7b26d.pdf
+2025-04-14T19:13:53.415Z [info]: PUT /api/resumes 200 - 4714ms
+2025-04-14T19:17:54.322Z [info]: GET /api/resumes/67f82a74bdb4c11772bcd19b/versions 200 - 1710ms
+2025-04-15T08:49:45.523Z [info]: Server running on port 5000
+2025-04-15T08:49:51.077Z [info]: MongoDB Connected: resumefeedback-shard-00-02.xmgix.mongodb.net
+2025-04-15T09:04:09.720Z [info]: POST /api/auth/login 200 - 481ms
+2025-04-15T09:05:27.429Z [info]: POST /api/auth/login 200 - 376ms
+2025-04-15T09:13:06.960Z [info]: GET /api/resumes 200 - 625ms
+2025-04-15T09:13:51.718Z [info]: GET /api/resumes/67f82a74bdb4c11772bcd19b/versions 401 - 4ms
+2025-04-15T09:14:28.174Z [info]: GET /api/resumes/67f82a74bdb4c11772bcd19b/versions 404 - 296ms
+2025-04-15T09:19:40.859Z [info]: GET /api/resumes/67fd950567fbb0b9435467e3/versions 200 - 4817ms
+2025-04-15T09:23:05.421Z [info]: GET /api/resumes/all 401 - 3ms
+2025-04-15T09:23:22.913Z [info]: GET /api/resumes/all 200 - 915ms
+2025-04-15T09:23:38.464Z [info]: GET /api/resumes?page=1&limit=2 200 - 574ms
+2025-04-15T09:23:56.291Z [info]: GET /api/resumes/all?page=1&limit=2 200 - 883ms
+2025-04-15T09:24:12.620Z [info]: GET /api/resumes/67f82a74bdb4c11772bcd19b 404 - 6ms
+2025-04-15T09:25:10.026Z [info]: GET /api/resumes/all 200 - 844ms
+2025-04-15T09:27:54.687Z [info]: POST /api/auth/login 200 - 386ms
+2025-04-15T09:29:37.010Z [info]: File uploaded successfully to S3: resume_1744709373243_672816a98156d58380bdd4d3.pdf
+2025-04-15T09:29:37.346Z [info]: PUT /api/resumes 200 - 4997ms
+2025-04-15T09:30:54.515Z [info]: GET /api/resumes 200 - 573ms
+2025-04-15T09:31:56.996Z [info]: GET /api/resumes/67fd950567fbb0b9435467e3/versions 200 - 3872ms
+2025-04-15T09:32:50.151Z [info]: File uploaded successfully to S3: resume_1744709565539_672816a98156d58380bdd4d3.pdf
+2025-04-15T09:32:50.469Z [info]: PUT /api/resumes 200 - 5781ms
+2025-04-15T09:39:08.141Z [info]: File uploaded successfully to S3: resume_1744709943771_672816a98156d58380bdd4d3.pdf
+2025-04-15T09:39:08.438Z [info]: PUT /api/resumes 200 - 5625ms
+2025-04-15T10:35:03.966Z [info]: Server running on port 5000
+2025-04-15T10:35:06.849Z [info]: MongoDB Connected: resumefeedback-shard-00-00.xmgix.mongodb.net
+2025-04-15T10:35:13.806Z [info]: GET /api/api/resumes?page=1&limit=10 404 - 16ms
+2025-04-15T10:35:35.058Z [info]: GET /api/api/resumes?page=1&limit=10 404 - 1ms
+2025-04-15T10:37:05.415Z [info]: GET /api/api/resumes?page=1&limit=10 404 - 2ms
+2025-04-15T10:38:43.383Z [info]: GET /api/resumes?page=1&limit=10 200 - 864ms
+2025-04-15T10:39:26.173Z [info]: GET /api/resumes/all?page=1&limit=10 200 - 902ms
+2025-04-15T10:39:40.756Z [info]: GET /api/resumes/67fd950567fbb0b9435467e3 404 - 6ms
+2025-04-15T10:39:44.758Z [info]: GET /api/resumes/67fd950567fbb0b9435467e3/versions 200 - 4069ms
+2025-04-15T10:40:06.834Z [info]: GET /api/resumes 200 - 589ms
+2025-04-15T10:40:07.266Z [info]: GET /api/resumes/67fd950567fbb0b9435467e3/versions 304 - 1070ms
+2025-04-15T10:40:07.946Z [info]: GET /api/resumes/67fd950567fbb0b9435467e3/versions 304 - 661ms
+2025-04-15T10:40:28.193Z [info]: GET /api/resumes/all?page=1&limit=10 304 - 866ms
+2025-04-15T10:40:31.599Z [info]: Not authorized to view this resume
+2025-04-15T10:40:31.602Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0/versions 403 - 290ms
+2025-04-15T10:40:31.893Z [info]: GET /api/resumes 304 - 567ms
+2025-04-15T10:40:31.916Z [info]: Not authorized to view this resume
+2025-04-15T10:40:31.919Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0/versions 403 - 302ms
+2025-04-15T10:40:39.268Z [info]: Not authorized to view this resume
+2025-04-15T10:40:39.270Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0/versions 403 - 292ms
+2025-04-15T10:40:39.587Z [info]: GET /api/resumes 304 - 589ms
+2025-04-15T10:40:39.895Z [info]: Not authorized to view this resume
+2025-04-15T10:40:39.899Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0/versions 403 - 276ms
+2025-04-15T10:40:43.269Z [info]: GET /api/resumes/all?page=1&limit=10 304 - 845ms
+2025-04-15T10:40:46.305Z [info]: Not authorized to view this resume
+2025-04-15T10:40:46.309Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0/versions 403 - 298ms
+2025-04-15T10:40:46.612Z [info]: GET /api/resumes 304 - 589ms
+2025-04-15T10:40:46.635Z [info]: Not authorized to view this resume
+2025-04-15T10:40:46.638Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0/versions 403 - 312ms
+2025-04-15T10:40:50.358Z [info]: Not authorized to view this resume
+2025-04-15T10:40:50.367Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0/versions 403 - 294ms
+2025-04-15T10:40:50.705Z [info]: GET /api/resumes 304 - 622ms
+2025-04-15T10:40:51.025Z [info]: Not authorized to view this resume
+2025-04-15T10:40:51.028Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0/versions 403 - 282ms
+2025-04-15T10:40:53.742Z [info]: GET /api/resumes/all?page=1&limit=10 304 - 852ms
+2025-04-15T10:41:00.082Z [info]: Not authorized to view this resume
+2025-04-15T10:41:00.086Z [info]: GET /api/resumes/6733d063ddb3a5f522d775cc/versions 403 - 296ms
+2025-04-15T10:41:00.378Z [info]: Not authorized to view this resume
+2025-04-15T10:41:00.381Z [info]: GET /api/resumes/6733d063ddb3a5f522d775cc/versions 403 - 289ms
+2025-04-15T10:41:00.390Z [info]: GET /api/resumes 304 - 591ms
+2025-04-15T10:41:10.465Z [info]: Not authorized to view this resume
+2025-04-15T10:41:10.467Z [info]: GET /api/resumes/6733d063ddb3a5f522d775cc/versions 403 - 301ms
+2025-04-15T10:41:10.765Z [info]: GET /api/resumes 304 - 588ms
+2025-04-15T10:41:11.090Z [info]: Not authorized to view this resume
+2025-04-15T10:41:11.093Z [info]: GET /api/resumes/6733d063ddb3a5f522d775cc/versions 403 - 291ms
+2025-04-15T10:41:26.808Z [info]: Not authorized to view this resume
+2025-04-15T10:41:26.811Z [info]: GET /api/resumes/6733d063ddb3a5f522d775cc/versions 403 - 316ms
+2025-04-15T10:41:27.223Z [info]: GET /api/resumes 304 - 616ms
+2025-04-15T10:41:27.566Z [info]: Not authorized to view this resume
+2025-04-15T10:41:27.568Z [info]: GET /api/resumes/6733d063ddb3a5f522d775cc/versions 403 - 280ms
+2025-04-15T10:49:01.561Z [info]: GET /api/resumes/all?page=1&limit=10 304 - 979ms
+2025-04-15T10:49:05.574Z [info]: GET /api/resumes 304 - 692ms
+2025-04-15T10:49:08.528Z [info]: GET /api/resumes/67fd950567fbb0b9435467e3/versions 304 - 3662ms
+2025-04-15T10:49:09.511Z [info]: GET /api/resumes/67fd950567fbb0b9435467e3/versions 304 - 980ms
+2025-04-15T10:50:31.400Z [info]: GET /api/resumes 304 - 585ms
+2025-04-15T10:50:34.549Z [info]: GET /api/resumes/67fd950567fbb0b9435467e3/versions 304 - 3756ms
+2025-04-15T10:50:35.504Z [info]: GET /api/resumes/67fd950567fbb0b9435467e3/versions 304 - 934ms
+2025-04-15T10:51:29.004Z [info]: GET /api/resumes/all?page=1&limit=10 304 - 1397ms
+2025-04-15T10:51:40.180Z [info]: Not authorized to view this resume
+2025-04-15T10:51:40.188Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0/versions 403 - 297ms
+2025-04-15T10:51:40.457Z [info]: GET /api/resumes 304 - 580ms
+2025-04-15T10:51:40.499Z [info]: Not authorized to view this resume
+2025-04-15T10:51:40.500Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0/versions 403 - 300ms
+2025-04-15T10:52:03.485Z [info]: GET /api/resumes/all?page=1&limit=10 304 - 860ms
+2025-04-15T10:52:08.332Z [info]: Not authorized to view this resume
+2025-04-15T10:52:08.334Z [info]: GET /api/resumes/6733d063ddb3a5f522d775cc/versions 403 - 295ms
+2025-04-15T10:52:08.642Z [info]: GET /api/resumes 304 - 587ms
+2025-04-15T10:52:08.649Z [info]: Not authorized to view this resume
+2025-04-15T10:52:08.652Z [info]: GET /api/resumes/6733d063ddb3a5f522d775cc/versions 403 - 289ms
+2025-04-15T10:52:21.077Z [info]: Not authorized to view this resume
+2025-04-15T10:52:21.084Z [info]: GET /api/resumes/6733d063ddb3a5f522d775cc/versions 403 - 295ms
+2025-04-15T10:52:21.413Z [info]: GET /api/resumes 304 - 602ms
+2025-04-15T10:52:21.799Z [info]: Not authorized to view this resume
+2025-04-15T10:52:21.801Z [info]: GET /api/resumes/6733d063ddb3a5f522d775cc/versions 403 - 288ms
+2025-04-15T10:52:56.730Z [info]: GET /api/resumes/all?page=1&limit=10 304 - 843ms
+2025-04-15T10:58:25.796Z [info]: Server running on port 5000
+2025-04-15T10:58:28.757Z [info]: MongoDB Connected: resumefeedback-shard-00-01.xmgix.mongodb.net
+2025-04-15T10:58:53.555Z [info]: GET /api/resumes/all?page=1&limit=10 304 - 1081ms
+2025-04-15T10:58:58.328Z [info]: Not authorized to view this resume
+2025-04-15T10:58:58.331Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0/versions 403 - 288ms
+2025-04-15T10:58:58.352Z [info]: Resume not found
+2025-04-15T10:58:58.355Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0 404 - 302ms
+2025-04-15T10:59:08.348Z [info]: Not authorized to view this resume
+2025-04-15T10:59:08.351Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0/versions 403 - 305ms
+2025-04-15T10:59:08.358Z [info]: Resume not found
+2025-04-15T10:59:08.369Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0 404 - 303ms
+2025-04-15T11:09:40.860Z [info]: Server running on port 5000
+2025-04-15T11:09:43.681Z [info]: MongoDB Connected: resumefeedback-shard-00-01.xmgix.mongodb.net
+2025-04-15T11:10:29.122Z [info]: GET /api/resumes/all?page=1&limit=10 304 - 973ms
+2025-04-15T11:10:33.827Z [info]: Not authorized to view this resume
+2025-04-15T11:10:33.836Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0/versions 403 - 304ms
+2025-04-15T11:10:34.154Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0 200 - 607ms
+2025-04-15T11:10:56.041Z [info]: GET /api/resumes/all?page=1&limit=10 304 - 851ms
+2025-04-15T11:10:59.815Z [info]: GET /api/resumes/67fd950567fbb0b9435467e3 200 - 763ms
+2025-04-15T11:11:02.973Z [info]: GET /api/resumes/67fd950567fbb0b9435467e3/versions 304 - 3944ms
+2025-04-15T11:11:03.972Z [info]: GET /api/resumes/67fd950567fbb0b9435467e3/versions 304 - 990ms
+2025-04-15T11:11:17.030Z [info]: GET /api/resumes/67fd950567fbb0b9435467e3 304 - 609ms
+2025-04-15T11:11:17.184Z [info]: GET /api/resumes/67fd950567fbb0b9435467e3/versions 304 - 774ms
+2025-04-15T11:11:17.850Z [info]: GET /api/resumes/67fd950567fbb0b9435467e3/versions 304 - 650ms
+2025-04-15T11:11:28.157Z [info]: GET /api/resumes/all?page=1&limit=10 304 - 861ms
+2025-04-15T11:11:32.388Z [info]: Not authorized to view this resume
+2025-04-15T11:11:32.392Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0/versions 403 - 286ms
+2025-04-15T11:11:32.680Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0 304 - 568ms
+2025-04-15T11:11:32.701Z [info]: Not authorized to view this resume
+2025-04-15T11:11:32.709Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0/versions 403 - 290ms
+2025-04-15T11:11:36.662Z [info]: GET /api/resumes/all?page=1&limit=10 304 - 849ms
+2025-04-15T11:18:25.339Z [info]: Not authorized to view this resume
+2025-04-15T11:18:25.350Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0/versions 403 - 339ms
+2025-04-15T11:18:25.685Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0 304 - 642ms
+2025-04-15T11:18:58.884Z [info]: GET /api/resumes/all?page=1&limit=10 304 - 894ms
