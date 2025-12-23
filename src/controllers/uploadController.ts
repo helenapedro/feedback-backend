@@ -1,7 +1,7 @@
 import { AuthRequest } from '../middlewares/auth';
 import { Response } from 'express';
 import { uploadToS3 } from '../services/s3Service';
-import { generateAIFeedback } from '../services/AIFeedbackGenerator';
+import { generateAIFeedback } from '../features/feedback/services/AIFeedbackGenerator';
 import Resume, {IResume} from '../models/Resume';
 import pdfParse from 'pdf-parse';
 import logger from '../helpers/logger';

@@ -4,7 +4,7 @@ import { Response } from 'express';
 import Resume from '../models/Resume';
 import { ListObjectVersionsCommand, CopyObjectCommand } from '@aws-sdk/client-s3';
 import { format } from 'date-fns';
-import s3 from '../helpers/awsConfig';
+import s3 from '../config/awsConfig';
 import logger from '../helpers/logger';
 
 // Assuming CLOUDFRONT_URL is defined somewhere in your config

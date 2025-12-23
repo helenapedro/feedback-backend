@@ -1,8 +1,8 @@
-import { AuthRequest } from '../middlewares/auth';
+import { AuthRequest } from '../../../middlewares/auth';
 import { Request, Response } from 'express';
-import * as validation from '../helpers/validation';
+import * as validation from '../../../helpers/validation';
 import * as resumeService from '../services/resumeService';
-import * as errorHandler from '../middlewares/errorHandler';
+import * as errorHandler from '../../../middlewares/errorHandler';
 
 // This controller is designed to retrieve a single resume associated with the currently authenticated user.
 // It's intended for users to access their own resume.

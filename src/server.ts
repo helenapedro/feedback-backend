@@ -4,9 +4,9 @@ import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import { rateLimitConfig } from './config';
-import authRoutes from './routes/authRoutes';
-import resumeRoutes from './routes/resumeRoutes';
-import commentRoutes from './routes/commentRoutes';
+import authRoutes from './features/auth/routes/authRoutes';
+import resumeRoutes from './features/resume/routes/resumeRoutes';
+import commentRoutes from './features/comment/routes/commentRoutes';
 import { errorHandler } from './middlewares/errorHandler';
 import { requestLogger, errorLogger } from './middlewares/logging';
 

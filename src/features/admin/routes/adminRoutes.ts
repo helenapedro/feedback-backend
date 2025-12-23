@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { getAllUsers } from '../controllers/adminController';
-import { authMiddleware } from '../middlewares/auth';
+import { authMiddleware } from '../../../middlewares/auth';
 
 const router = express.Router();
 

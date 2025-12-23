@@ -1,7 +1,7 @@
 import { Upload } from '@aws-sdk/lib-storage';
 import { DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { v4 as uuidv4 } from 'uuid';
-import s3 from '../helpers/awsConfig';
+import s3 from '../config/awsConfig';
 import multer from 'multer';
 import path from 'path';
 import logger from '../helpers/logger';
