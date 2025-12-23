@@ -20,32 +20,32 @@ const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:8080',
   'https://resumefeedback.hmpedro.com',
-  'https://master.d1cehne8ow0dq0.amplifyapp.com/'
+  'https://master.d1cehne8ow0dq0.amplifyapp.com'
 ];
 
-const corsOptions = {
-  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+const corsOptions: cors.CorsOptions = {
+  origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error(`Not allowed by CORS: ${origin}`));
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Authorization', 'Content-Type'],
+  credentials: true, 
 };
 
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); 
 
 app.use(express.json());
 app.use(morgan('dev'));
 app.use(helmet());
-app.use(requestLogger);
-app.use(errorLogger);
-app.use(errorHandler);
 app.use(limiter);
 
-// Routes
+app.use(requestLogger);
+
 app.use('/api/auth', authRoutes);
 app.use('/api/resumes', resumeRoutes);
 app.use('/api/comments', commentRoutes);
@@ -54,5 +54,7 @@ app.get('/', (req, res) => {
   res.send('Resume Feedback API');
 });
 
+app.use(errorLogger);
+app.use(errorHandler);
 
 export default app;
