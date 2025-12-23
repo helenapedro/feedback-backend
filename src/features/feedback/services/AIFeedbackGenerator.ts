@@ -1,70 +1,64 @@
-import {
-  BedrockRuntimeClient,
-  InvokeModelCommand,
-  type InvokeModelCommandOutput,
-} from "@aws-sdk/client-bedrock-runtime";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const bedrockRegion = process.env.AWS_REGION || process.env.BEDROCK_REGION;
-const bedrockModelId = process.env.BEDROCK_MODEL_ID;
+const geminiApiKey = process.env.GEMINI_API_KEY;
+const geminiModelId = process.env.GEMINI_MODEL_ID || "gemini-2.5-flash";
 
-const bedrockClient = bedrockRegion
-  ? new BedrockRuntimeClient({ region: bedrockRegion })
-  : null;
+if (!geminiApiKey) {
+  throw new Error(
+    "GEMINI_API_KEY is not defined. Please set it in your .env file."
+  );
+}
 
-const decodeResponse = (body: InvokeModelCommandOutput["body"]) => {
-  if (!body) return "";
-  if (typeof body === "string") return body;
-  if (body instanceof Uint8Array || Buffer.isBuffer(body)) {
-    return new TextDecoder().decode(body);
-  }
-  return "";
+const genAI = new GoogleGenerativeAI(geminiApiKey);
+const model = genAI.getGenerativeModel({ model: geminiModelId });
+
+const buildPrompt = (extractedText: string): string => {
+  return `
+You are an experienced recruiter and ATS (Applicant Tracking System) specialist.
+
+Analyze the resume below and provide clear, structured, and actionable feedback.
+
+Please include:
+1. Strengths (bullet points)
+2. Weaknesses or gaps
+3. Suggestions to rewrite bullet points (with examples)
+4. ATS optimization tips (keywords, formatting, structure)
+5. A short "Next Steps" checklist (max 5 items)
+
+Resume content:
+${extractedText}
+`.trim();
 };
 
-export const generateAIFeedback = async (resumeId: string, extractedText: string): Promise<string> => {
-  if (!extractedText?.trim()) {
+export const generateAIFeedback = async (
+  resumeId: string,
+  extractedText: string
+): Promise<string> => {
+  if (!extractedText || !extractedText.trim()) {
     throw new Error("No resume text provided for AI feedback.");
   }
 
-  if (!bedrockRegion || !bedrockClient) {
-    throw new Error("Missing Bedrock region configuration.");
-  }
-
-  if (!bedrockModelId) {
-    throw new Error("Missing Bedrock model identifier.");
-  }
-
   try {
-    const payload = JSON.stringify({
-      inputText: `Analyze the following resume and provide constructive feedback:\n\n${extractedText}`,
-      parameters: {
-        max_tokens: 500,
-        temperature: 0.6,
-      },
-    });
+    const prompt = buildPrompt(extractedText);
 
-    const command = new InvokeModelCommand({
-      modelId: bedrockModelId,
-      contentType: "application/json",
-      accept: "application/json",
-      body: payload,
-    });
+    const result = await model.generateContent(prompt);
+    const feedback = result.response.text();
 
-    const response = await bedrockClient.send(command);
-    const decoded = decodeResponse(response.body);
-
-    const parsed = decoded ? JSON.parse(decoded) : {};
-    const outputText = parsed.outputText || parsed.result;
-
-    if (!outputText?.trim()) {
-      throw new Error("No feedback generated from Bedrock.");
+    if (!feedback || !feedback.trim()) {
+      throw new Error("Gemini returned an empty response.");
     }
 
-    return outputText.trim();
+    return feedback.trim();
   } catch (error) {
-    console.error(`Error generating AI feedback for resume ${resumeId}:`, error);
-    throw error instanceof Error ? error : new Error("Failed to generate AI feedback.");
+    console.error(
+      `Error generating AI feedback with Gemini for resume ${resumeId}:`,
+      error
+    );
+    throw error instanceof Error
+      ? error
+      : new Error("Failed to generate AI feedback using Gemini.");
   }
 };
