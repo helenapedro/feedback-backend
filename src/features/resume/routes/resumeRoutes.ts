@@ -1,10 +1,10 @@
 import express from 'express';
-import { uploadResume } from '../controllers/uploadController';
+import { uploadResume } from '../../../controllers/uploadController';
 import * as resumeController from '../controllers/resumeController';
-import { listResumeVersions, restoreResumeVersion } from '../controllers/versionController';
-import { authMiddleware, AuthRequest } from '../middlewares/auth';
-import { upload } from '../services/s3Service';
-import logger from '../helpers/logger';
+import { listResumeVersions, restoreResumeVersion } from '../../../controllers/versionController';
+import { authMiddleware, AuthRequest } from '../../../middlewares/auth';
+import { upload } from '../../../services/s3Service';
+import logger from '../../../helpers/logger';
 
 const router = express.Router();
 
@@ -27,16 +27,14 @@ router.post(
   }
 );
 
-// Get User's Resume
 router.get('/', authMiddleware, resumeController.getResume);
 
-// Get All Resumes (with filters)
 router.get('/all', authMiddleware, resumeController.getAllResumes);
 
-// Get Resume by ID
 router.get('/:id', authMiddleware, resumeController.getResumeDetails);
 
-router.get('/:id/versions', authMiddleware, async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
+router.get('/:id/versions', authMiddleware, 
+  async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
   try {
     await listResumeVersions(req, res);
   } catch (error) {
@@ -44,7 +42,8 @@ router.get('/:id/versions', authMiddleware, async (req: AuthRequest, res: expres
   }
 });
 
-router.put('/', authMiddleware, upload.single('resume'), async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
+router.put('/', authMiddleware, upload.single('resume'), 
+  async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
   try {
     await resumeController.updateResume(req, res);
   } catch (error) {
@@ -64,7 +63,8 @@ router.put(
   }
 );
 
-router.post('/:id/restore/:versionId', authMiddleware, async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
+router.post('/:id/restore/:versionId', authMiddleware, 
+  async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
   try {
     await restoreResumeVersion(req, res);
   } catch (error) {

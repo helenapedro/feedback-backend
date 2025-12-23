@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import User from '../models/User';
-import logger from '../helpers/logger';
+import User from '../../../models/User';
+import logger from '../../../helpers/logger';
 
 export const getAllUsers = async (req: Request, res: Response): Promise<Response> => {
   try {

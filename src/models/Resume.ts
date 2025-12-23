@@ -5,7 +5,7 @@ export interface IResume extends Document {
   posterId: IUser['_id'];
   format?: string;
   url?: string;
-  s3Key?: string | null; // S3 key for the file, if applicable
+  s3Key?: string | null; 
   description?: string;
   aiFeedback: string;
   createdAt: Date;
@@ -31,11 +31,11 @@ const ResumeSchema: Schema = new Schema(
     description: { 
       type: String, 
       required: false, 
-      maxlength: 500, // Limit description to 500 characters for concise summaries.
+      maxlength: 500,
     },
     aiFeedback: {
       type: String,
-      default: "" // feedback is always stored, even if empty initially
+      default: "" 
     }
   },
   { timestamps: true }

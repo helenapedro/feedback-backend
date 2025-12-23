@@ -4,8 +4,6 @@ import * as validation from '../../../helpers/validation';
 import * as resumeService from '../services/resumeService';
 import * as errorHandler from '../../../middlewares/errorHandler';
 
-// This controller is designed to retrieve a single resume associated with the currently authenticated user.
-// It's intended for users to access their own resume.
 export const getResume = async (req: AuthRequest, res: Response): Promise<void> => {
   if (!req.user || !req.user.userId) {
     errorHandler.handleAuthError(res);
@@ -22,15 +20,12 @@ export const getResume = async (req: AuthRequest, res: Response): Promise<void> 
       return;
     }
 
-    res.status(200).json(resume[0]); // Return the first resume
+    res.status(200).json(resume[0]); 
   } catch (error) {
     errorHandler.handleServerError(res, error, 'Error fetching resume');
   }
 };
 
-// This controller is designed to retrieve a list of all resumes, with optional filtering, pagination, and sorting.
-// It's intended for administrative or management purposes where all resumes need to be accessed.
-// The controller supports filtering by format and creation date, as well as pagination and sorting by creation date.
 export const getAllResumes = async (req: Request, res: Response): Promise<void> => {
   const { page = 1, limit = 10, format, createdAt } = req.query;
   const maxLimit = 100;
@@ -98,7 +93,6 @@ export const updateResume = async (req: AuthRequest, res: Response): Promise<voi
     let resume = await resumeService.findResumesByUser(userId);
 
     if (!resume || resume.length === 0) {
-      // If no resume exists, create a new one
       const newResume = await resumeService.createResume(userId, format, description, req.file);
       if (!newResume) {
         res.status(500).json({ message: 'Failed to create resume' });

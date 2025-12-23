@@ -1,7 +1,7 @@
-import Resume, { IResume } from '../models/Resume';
-import { uploadToS3, deleteFromS3 } from './s3Service';
+import Resume, { IResume } from '../../../models/Resume';
+import { uploadToS3, deleteFromS3 } from '../../../services/s3Service';
 import path from 'path';
-import logger from '../helpers/logger';
+import logger from '../../../helpers/logger';
 
 export const findResumeById = async (id: string) => {
   return Resume.findById(id).populate('posterId', '-password');
@@ -29,10 +29,10 @@ export const createResume = async (userId: string, format?: string, description?
     let fileUrl: string | null = null;
     if (file) {
       const ext = path.extname(file.originalname);
-      const baseKey = `resume_${Date.now()}_${userId}${ext}`; // Consistent base key
+      const baseKey = `resume_${Date.now()}_${userId}${ext}`; 
       const uploadedUrl = await uploadToS3(file, baseKey);
       fileUrl = uploadedUrl || null;
-      s3Key = fileUrl ? new URL(fileUrl).pathname.substring(1) : null; // Extract S3 key
+      s3Key = fileUrl ? new URL(fileUrl).pathname.substring(1) : null; 
       if (!fileUrl || !s3Key) {
         logger.error('File upload failed: No URL or S3 key received');
         throw new Error('File upload failed');
@@ -43,7 +43,7 @@ export const createResume = async (userId: string, format?: string, description?
       posterId: userId,
       format: format,
       url: fileUrl || undefined,
-      s3Key: s3Key || undefined, // Store the S3 key
+      s3Key: s3Key || undefined, 
       description: description,
     });
     return resume;
@@ -71,7 +71,7 @@ export const updateResumeData = async (id: string, format?: string, description?
       newS3Key = newFileUrl ? new URL(newFileUrl).pathname.substring(1) : null;
 
       if (newFileUrl) {
-        resume.url = `${newFileUrl}?t=${Date.now()}`; // Keep cache busting
+        resume.url = `${newFileUrl}?t=${Date.now()}`; 
         resume.s3Key = newS3Key;
       } else {
         throw new Error('File upload failed');
@@ -95,7 +95,7 @@ export const deleteResumeData = async (id: string) => {
   }
 
   if (resume.url) {
-    await deleteFromS3(resume.url.split('?')[0]); // Delete based on the base URL
+    await deleteFromS3(resume.url.split('?')[0]); 
   }
   return Resume.findByIdAndDelete(id);
 };

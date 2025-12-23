@@ -1,9 +1,9 @@
-import { AuthRequest } from '../middlewares/auth';
+import { AuthRequest } from '../../../middlewares/auth';
 import { Request, Response } from 'express';
-import { getCache, setCache, clearCache } from '../services/cacheService';
-import Comment from '../models/Comment';
-import Resume from '../models/Resume';
-import logger from '../helpers/logger';
+import { getCache, setCache, clearCache } from '../../../services/cacheService';
+import Comment from '../../../models/Comment';
+import Resume from '../../../models/Resume';
+import logger from '../../../helpers/logger';
 
 export const addComment = async (req: AuthRequest, res: Response): Promise<void> => {
   const { resumeId, content } = req.body;

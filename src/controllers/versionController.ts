@@ -7,7 +7,6 @@ import { format } from 'date-fns';
 import s3 from '../config/awsConfig';
 import logger from '../helpers/logger';
 
-// Assuming CLOUDFRONT_URL is defined somewhere in your config
 const CLOUDFRONT_URL = "https://d1ldjxzzmwekb0.cloudfront.net";
 
 export const listResumeVersions = async (req: AuthRequest, res: Response): Promise<void> => {
@@ -53,7 +52,7 @@ export const listResumeVersions = async (req: AuthRequest, res: Response): Promi
       };
     });
 
-    res.status(200).json({ versions: versions }); // Handle cases with no versions
+    res.status(200).json({ versions: versions });
   } catch (error) {
     logger.error('Error listing resume versions:', error);
     res.status(500).json({ message: 'Server error', error });
@@ -85,8 +84,8 @@ export const restoreResumeVersion = async (req: AuthRequest, res: Response): Pro
 
     const params = {
       Bucket: 'feedback-fs',
-      CopySource: `feedback-fs/${resume.s3Key}?versionId=${versionId}`, // Access s3Key
-      Key: resume.s3Key, // Access s3Key
+      CopySource: `feedback-fs/${resume.s3Key}?versionId=${versionId}`, 
+      Key: resume.s3Key, 
     };
 
     const command = new CopyObjectCommand(params);
