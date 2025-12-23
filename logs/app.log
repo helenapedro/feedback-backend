@@ -487,3 +487,7 @@
 2025-04-15T11:18:25.350Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0/versions 403 - 339ms
 2025-04-15T11:18:25.685Z [info]: GET /api/resumes/6773097bf7d7b714ac9b34d0 304 - 642ms
 2025-04-15T11:18:58.884Z [info]: GET /api/resumes/all?page=1&limit=10 304 - 894ms
+2025-12-23T21:20:48.508Z [info]: Server running on port 5000
+2025-12-23T21:20:48.574Z [error]: Error: querySrv ENOTFOUND _mongodb._tcp.resumefeedback.xmgix.mongodb.net
+2025-12-23T21:23:59.247Z [info]: Server running on port 5000
+2025-12-23T21:23:59.290Z [error]: Error: querySrv ENOTFOUND _mongodb._tcp.resumefeedback.xmgix.mongodb.net

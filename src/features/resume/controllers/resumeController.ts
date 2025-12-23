@@ -108,7 +108,7 @@ export const updateResume = async (req: AuthRequest, res: Response): Promise<voi
     }
 
     const updatedResume = await resumeService.updateResumeData(
-      resume[0]._id as string,
+      resume[0]._id.toString(),
       format,
       description,
       req.file,
@@ -169,7 +169,7 @@ export const deleteResume = async (req: AuthRequest, res: Response): Promise<voi
       return;
     }
 
-    await resumeService.deleteResumeData(resume[0]._id as string);
+    await resumeService.deleteResumeData(resume[0]._id.toString());
     res.status(200).json({ message: 'Resume deleted successfully' });
   } catch (error) {
     errorHandler.handleServerError(res, error, 'Error deleting resume');

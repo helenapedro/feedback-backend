@@ -9,7 +9,6 @@ import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-// AWS SQS Configuration
 const sqsClient = new SQSClient({ region: process.env.AWS_REGION });
 const queueUrl = process.env.AWS_SQS_QUEUE_URL;
 
@@ -34,7 +33,6 @@ export const uploadResume = async (req: AuthRequest, res: Response): Promise<voi
     return;
   }
 
-  // Validate file type
   const allowedMimeTypes = ['application/pdf', 'image/jpeg', 'image/png'];
   if (!allowedMimeTypes.includes(req.file.mimetype)) {
     res.status(400).json({ message: 'Invalid file type' });
@@ -56,21 +54,20 @@ export const uploadResume = async (req: AuthRequest, res: Response): Promise<voi
       format,
       url: fileUrl,
       description,
-      aiFeedback: "", // Will update after generating AI feedback
+      aiFeedback: "", 
     });
 
-    // Send message to SQS for AI feedback generation
     if (queueUrl) {
       const messageParams = {
         QueueUrl: queueUrl,
         MessageBody: JSON.stringify({
-          resumeId: (resume._id as string).toString(),
+          resumeId: resume._id.toString(),
           extractedText: extractedText,
         }),
       };
 
       await sqsClient.send(new SendMessageCommand(messageParams));
-      logger.info(`Message sent to SQS for resumeId: ${(resume._id as string).toString()}`);
+      logger.info(`Message sent to SQS for resumeId: ${resume._id.toString()}`);
     } else {
       logger.error('AWS_SQS_QUEUE_URL is not defined');
     }
