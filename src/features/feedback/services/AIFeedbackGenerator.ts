@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const geminiApiKey = process.env.GEMINI_API_KEY;
-const geminiModelId = process.env.GEMINI_MODEL_ID || "gemini-2.5-flash";
+const geminiModelId = process.env.GEMINI_MODEL_ID || "gemini-1.5-flash";
 
 if (!geminiApiKey) {
   throw new Error(
