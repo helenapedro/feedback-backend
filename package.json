@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require ts-node/register --extensions ts --recursive 'tests/**/*.test.ts'"
+    "test": "mocha --require ts-node/register --extensions ts --recursive 'tests/**/*.test.ts'",
+    "start:web": "npx ts-node src/index.ts",
+    "start:worker": "npx ts-node src/features/feedback/workers/sqsWorker.ts"
   },
   "keywords": [],
   "author": "",

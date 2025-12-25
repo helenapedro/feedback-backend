@@ -1,2 +1,2 @@
-web: npx ts-node src/index.ts
-worker: npx ts-node src/features/feedback/workers/sqsWorker.ts
+web: npm run start:web
+worker: npm run start:worker
