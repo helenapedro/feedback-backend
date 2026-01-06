@@ -9,7 +9,7 @@ AI feedback generation is handled **asynchronously via AWS SQS**, processed by a
 
 - JWT authentication with user & admin roles
 - Resume upload & storage
-  - AWS S3 with versioning enabled 
+  - AWS S3 with versioning enabled
   - CloudFront public URLs
 - Asynchronous AI-powered resume feedback
   - Google Gemini API
@@ -26,36 +26,47 @@ AI feedback generation is handled **asynchronously via AWS SQS**, processed by a
 
 ---
 
+## Asynchronous Resume Processing Architecture
+
+![Asynchronous Resume Processing Architecture](https://github.com/helenapedro/feedback-backend/blob/main/diagramas/AsynchronousResumeProcessingArchitecture.jpeg)
+
 ## 🧱 Architecture Overview
+
 ### High-Level Flow
+
 ![Archtecture Overview](https://github.com/helenapedro/feedback-backend/blob/main/diagramas/ArchtectureOverview.jpeg)
 
 ### 📐 Sequence Diagram — Upload & AI Feedback (Async)
+
 ![Sequence Diagram](https://mbeuaportfolio-media.s3.us-east-2.amazonaws.com/SequenceDiagram-SQSWorkerArchitecture.jpg)
 
 ### Entry Points
+
 - `src/index.ts`  
   Loads environment variables, connects to MongoDB, and starts the HTTP server.
 - `src/server.ts`  
   Express application setup (middleware, CORS, routes).
 
 ### Routes
-| Prefix | Description |
-|------|-------------|
-| `/api/auth/*` | Authentication & user management |
-| `/api/resumes/*` | Resume upload, listing & details |
-| `/api/comments/*` | Resume comments |
-| `/api/admin/*` | Admin-only endpoints |
+
+| Prefix            | Description                      |
+| ----------------- | -------------------------------- |
+| `/api/auth/*`     | Authentication & user management |
+| `/api/resumes/*`  | Resume upload, listing & details |
+| `/api/comments/*` | Resume comments                  |
+| `/api/admin/*`    | Admin-only endpoints             |
 
 ### 🧩 Feature Structure
 
 - **Auth**
+
   - User registration & authentication
   - JWT-based authorization
   - Role-based access control (user / admin)
   - Located in: `src/features/auth`
 
 - **Resumes**
+
   - Resume upload and validation
   - File storage in AWS S3 with CloudFront URLs
   - PDF text extraction
@@ -66,6 +77,7 @@ AI feedback generation is handled **asynchronously via AWS SQS**, processed by a
     - Versioning controller: `versionController.ts`
 
 - **AI Feedback**
+
   - Resume analysis and feedback generation
   - Integration with Google Gemini API
   - Asynchronous processing via AWS SQS
@@ -76,18 +88,21 @@ AI feedback generation is handled **asynchronously via AWS SQS**, processed by a
     - Worker: `sqsWorker.ts`
 
 - **Comments**
+
   - User comments on resumes
   - CRUD operations
   - Simple in-memory caching
   - Located in: `src/features/comment`
 
 - **Admin**
+
   - Admin-only endpoints
   - User management
   - System-level controls
   - Located in: `src/features/admin`
 
 - **Shared & Infrastructure**
+
   - Request validation and middlewares
   - Centralized logging (Winston)
   - Error handling helpers
@@ -102,18 +117,21 @@ AI feedback generation is handled **asynchronously via AWS SQS**, processed by a
     - `Comment`
     - `AIFeedback`
   - Located in: `src/models`
- 
-### Resume AI Fields   
+
+### Resume AI Fields
+
 - aiFeedback: string
 - aiStatus: "pending" | "done" | "failed"
 - aiError?: string
-  
+
 ### Storage
+
 - AWS S3 for resume files
 - CloudFront for public file access
 - S3 object version listing & restore support
 
 ### Logging & Errors
+
 - Winston logger (`src/helpers/logger.ts`)
 - `express-winston` middleware
 - Centralized error helpers
@@ -123,6 +141,7 @@ AI feedback generation is handled **asynchronously via AWS SQS**, processed by a
 ## ⚙️ Getting Started
 
 ### Install Dependencies
+
 ```bash
 npm install
 ```
@@ -130,24 +149,26 @@ npm install
 Environment Variables
 
 Create a .env file in the project root:
-  - PORT=3000
-  - MONGO_URI=your_mongo_connection_string
-  - FEEDBACK_JWT_PRIVATE_KEY=your_jwt_secret
 
-  - AWS_REGION=us-east-1
-  - AWS_ACCESS_KEY_ID=your_key
-  - AWS_SECRET_ACCESS_KEY=your_secret
-  - AWS_SQS_QUEUE_URL=your_sqs_queue_url
+- PORT=3000
+- MONGO_URI=your_mongo_connection_string
+- FEEDBACK_JWT_PRIVATE_KEY=your_jwt_secret
 
-  - GEMINI_API_KEY=your_gemini_api_key
-  - GEMINI_MODEL_ID=your_model_id
+- AWS_REGION=us-east-1
+- AWS_ACCESS_KEY_ID=your_key
+- AWS_SECRET_ACCESS_KEY=your_secret
+- AWS_SQS_QUEUE_URL=your_sqs_queue_url
+
+- GEMINI_API_KEY=your_gemini_api_key
+- GEMINI_MODEL_ID=your_model_id
 
 # Optional
-  - CLOUDFRONT_URL=https://your-distribution.cloudfront.net
 
+- CLOUDFRONT_URL=https://your-distribution.cloudfront.net
 
 ▶️ Running the Project
 Start the API Server
+
 ```bash
 npm run dev
 # or
@@ -155,12 +176,15 @@ ts-node src/index.ts
 ```
 
 Start the SQS Worker (separate process)
+
 ```bash
 ts-node src/features/feedback/workers/sqsWorker.ts
 ```
+
 Important: The worker must be running for AI feedback to be generated.
 
 🧪 Tests
+
 ```bash
 npm test
 ```
@@ -168,69 +192,79 @@ npm test
 🔄 How It Works
 Resume Upload Flow
 
-* POST /api/resumes/upload
-* User authentication via JWT
-* File validation (type & size)
-* Upload to S3
-* Resume document saved in MongoDB
-* PDF text extraction
-* { resumeId, extractedText } enqueued to SQS
+- POST /api/resumes/upload
+- User authentication via JWT
+- File validation (type & size)
+- Upload to S3
+- Resume document saved in MongoDB
+- PDF text extraction
+- { resumeId, extractedText } enqueued to SQS
 
 ## AI Feedback Worker
-* Long-polls AWS SQS
-* Generates feedback via Gemini
-* Updates:
-  * Resume.aiFeedback
-  * Resume.aiStatus    
-* Deletes SQS message on success
-* Marks resume as failed on error (retry/DLQ ready)
+
+- Long-polls AWS SQS
+- Generates feedback via Gemini
+- Updates:
+  - Resume.aiFeedback
+  - Resume.aiStatus
+- Deletes SQS message on success
+- Marks resume as failed on error (retry/DLQ ready)
 
 ## Versioning
-* GET /api/resumes/:id/versions
-Lists S3 object versions
-* POST /api/resumes/:id/restore/:versionId
-Restores a previous version and updates the CloudFront URL
+
+- GET /api/resumes/:id/versions
+  Lists S3 object versions
+- POST /api/resumes/:id/restore/:versionId
+  Restores a previous version and updates the CloudFront URL
 
 ## Comments
-* CRUD operations via /api/comments/*
-* In-memory caching via cacheService.ts
+
+- CRUD operations via /api/comments/\*
+- In-memory caching via cacheService.ts
 
 ## 📌 API Endpoints
+
 ### Auth
-* POST /api/auth/register
-* POST /api/auth/login
-* GET /api/auth/user/:userId
-* PUT /api/auth/user/update
-* POST /api/auth/user/change-password
-* DELETE /api/auth/user/delete
+
+- POST /api/auth/register
+- POST /api/auth/login
+- GET /api/auth/user/:userId
+- PUT /api/auth/user/update
+- POST /api/auth/user/change-password
+- DELETE /api/auth/user/delete
 
 ### Resumes
-* POST /api/resumes/upload
-* GET /api/resumes
-* GET /api/resumes/all
-* GET /api/resumes/:id
-* PUT /api/resumes
-* PUT /api/resumes/update-description
-* DELETE /api/resumes
+
+- POST /api/resumes/upload
+- GET /api/resumes
+- GET /api/resumes/all
+- GET /api/resumes/:id
+- PUT /api/resumes
+- PUT /api/resumes/update-description
+- DELETE /api/resumes
 
 ### Versions
-* GET /api/resumes/:id/versions
-* POST /api/resumes/:id/restore/:versionId
+
+- GET /api/resumes/:id/versions
+- POST /api/resumes/:id/restore/:versionId
 
 ### Comments
-* POST /api/comments/add
-* GET /api/comments/:resumeId
-* PUT /api/comments/:commentId
-* DELETE /api/comments/:commentId
+
+- POST /api/comments/add
+- GET /api/comments/:resumeId
+- PUT /api/comments/:commentId
+- DELETE /api/comments/:commentId
 
 ### Admin
-* GET /api/admin/users
+
+- GET /api/admin/users
 
 ## ⚠️ Notes & Constraints
-* Allowed upload types: pdf, jpeg, png
-* Max file size: 10 MB
-* Resume description length: ≤ 500 characters
-* Rate limit: 100 requests / 15 minutes
-* S3 bucket must have versioning enabled
-* CloudFront URL must match your distribution
-* If the worker is not running, aiFeedback will remain empty
+
+- Allowed upload types: pdf, jpeg, png
+- Max file size: 10 MB
+- Resume description length: ≤ 500 characters
+- Rate limit: 100 requests / 15 minutes
+- S3 bucket must have versioning enabled
+- CloudFront URL must match your distribution
+- If the worker is not running, aiFeedback will remain empty
