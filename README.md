@@ -28,13 +28,7 @@ AI feedback generation is handled **asynchronously via AWS SQS**, processed by a
 
 ## 🧱 Architecture Overview
 ### High-Level Flow
-1. User uploads a resume
-2. Resume is stored in S3 and registered in MongoDB
-3. A message { resumeId, extractedText } is sent to SQS
-4. A background worker consumes the message
-5. AI feedback is generated using Gemini
-6. Resume document is updated with AI feedback
-7. Other users can comment on the resume
+![Archtecture Overview](https://github.com/helenapedro/feedback-backend/blob/main/diagramas/ArchtectureOverview.jpeg)
 
 ### 📐 Sequence Diagram — Upload & AI Feedback (Async)
 ![Sequence Diagram](https://mbeuaportfolio-media.s3.us-east-2.amazonaws.com/SequenceDiagram-SQSWorkerArchitecture.jpg)
@@ -136,20 +130,20 @@ npm install
 Environment Variables
 
 Create a .env file in the project root:
-PORT=3000
-MONGO_URI=your_mongo_connection_string
-FEEDBACK_JWT_PRIVATE_KEY=your_jwt_secret
+  - PORT=3000
+  - MONGO_URI=your_mongo_connection_string
+  - FEEDBACK_JWT_PRIVATE_KEY=your_jwt_secret
 
-AWS_REGION=us-east-1
-AWS_ACCESS_KEY_ID=your_key
-AWS_SECRET_ACCESS_KEY=your_secret
-AWS_SQS_QUEUE_URL=your_sqs_queue_url
+  - AWS_REGION=us-east-1
+  - AWS_ACCESS_KEY_ID=your_key
+  - AWS_SECRET_ACCESS_KEY=your_secret
+  - AWS_SQS_QUEUE_URL=your_sqs_queue_url
 
-GEMINI_API_KEY=your_gemini_api_key
-GEMINI_MODEL_ID=your_model_id
+  - GEMINI_API_KEY=your_gemini_api_key
+  - GEMINI_MODEL_ID=your_model_id
 
 # Optional
-CLOUDFRONT_URL=https://your-distribution.cloudfront.net
+  - CLOUDFRONT_URL=https://your-distribution.cloudfront.net
 
 
 ▶️ Running the Project
