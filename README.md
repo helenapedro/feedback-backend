@@ -108,15 +108,6 @@ AI feedback generation is handled **asynchronously via AWS SQS**, processed by a
     - `Comment`
     - `AIFeedback`
   - Located in: `src/models`
-
-
-### 🗄️Persistence
-- MongoDB via Mongoose
-- Core models:
-  - `User`
-  - `Resume`
-  - `Comment`
-  - `AIFeedback`
  
 ### Resume AI Fields   
 - aiFeedback: string
