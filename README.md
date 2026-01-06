@@ -53,16 +53,62 @@ AI feedback generation is handled **asynchronously via AWS SQS**, processed by a
 | `/api/comments/*` | Resume comments |
 | `/api/admin/*` | Admin-only endpoints |
 
-### Feature Structure
-- **Auth**: `src/features/auth`
-- **Resumes**: `src/features/resume`
-  - Upload: `src/controllers/uploadController.ts`
-  - Versioning: `src/controllers/versionController.ts`
-- **Comments**: `src/features/comment`
-- **Admin**: `src/features/admin`
+### 🧩 Feature Structure
+
+- **Auth**
+  - User registration & authentication
+  - JWT-based authorization
+  - Role-based access control (user / admin)
+  - Located in: `src/features/auth`
+
+- **Resumes**
+  - Resume upload and validation
+  - File storage in AWS S3 with CloudFront URLs
+  - PDF text extraction
+  - Resume versioning (list & restore)
+  - Asynchronous AI feedback trigger (SQS)
+  - Located in: `src/features/resume`
+    - Upload controller: `uploadController.ts`
+    - Versioning controller: `versionController.ts`
+
 - **AI Feedback**
-  - Generator: `src/features/feedback/services/AIFeedbackGenerator.ts`
-  - Worker: `src/features/feedback/workers/sqsWorker.ts`
+  - Resume analysis and feedback generation
+  - Integration with Google Gemini API
+  - Asynchronous processing via AWS SQS
+  - Background worker for message consumption
+  - Failure handling with retry/DLQ readiness
+  - Located in: `src/features/feedback`
+    - Generator service: `AIFeedbackGenerator.ts`
+    - Worker: `sqsWorker.ts`
+
+- **Comments**
+  - User comments on resumes
+  - CRUD operations
+  - Simple in-memory caching
+  - Located in: `src/features/comment`
+
+- **Admin**
+  - Admin-only endpoints
+  - User management
+  - System-level controls
+  - Located in: `src/features/admin`
+
+- **Shared & Infrastructure**
+  - Request validation and middlewares
+  - Centralized logging (Winston)
+  - Error handling helpers
+  - Caching utilities
+  - Located in: `src/middlewares`, `src/helpers`, `src/shared`
+
+- **Persistence**
+  - MongoDB via Mongoose
+  - Domain models:
+    - `User`
+    - `Resume`
+    - `Comment`
+    - `AIFeedback`
+  - Located in: `src/models`
+
 
 ### 🗄️Persistence
 - MongoDB via Mongoose
