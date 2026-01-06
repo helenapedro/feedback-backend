@@ -1,19 +1,20 @@
 # Resume Feedback API
 
 A **Node.js / Express + MongoDB** backend for uploading resumes, storing them in **AWS S3**, and generating **AI-powered feedback using Gemini**.  
-AI feedback generation runs **asynchronously via SQS**, handled by a background worker.
+AI feedback generation is handled **asynchronously via AWS SQS**, processed by a dedicated background worker.
 
 ---
 
 ## 🚀 Features
 
 - JWT authentication with user & admin roles
-- Resume upload to AWS S3
+- Resume upload & storage
+  - AWS S3 with versioning enabled 
   - CloudFront public URLs
-  - S3 object versioning with restore support
-- Asynchronous AI feedback generation
-  - SQS-driven worker
-  - Gemini API integration
+- Asynchronous AI-powered resume feedback
+  - Google Gemini API
+  - SQS-driven background worker
+  - Retry-friendly architecture
 - Resume comments
   - CRUD operations
   - Simple in-memory caching
@@ -26,18 +27,29 @@ AI feedback generation runs **asynchronously via SQS**, handled by a background 
 ---
 
 ## 🧱 Architecture Overview
+### High-Level Flow
+1. User uploads a resume
+2. Resume is stored in S3 and registered in MongoDB
+3. A message { resumeId, extractedText } is sent to SQS
+4. A background worker consumes the message
+5. AI feedback is generated using Gemini
+6. Resume document is updated with AI feedback
+7. Other users can comment on the resume
+
+### 📐 Sequence Diagram — Upload & AI Feedback (Async)
+![Sequence Diagram](https://mbeuaportfolio-media.s3.us-east-2.amazonaws.com/SequenceDiagram-SQSWorkerArchitecture.jpg)
 
 ### Entry Points
 - `src/index.ts`  
-  Loads environment variables, connects to MongoDB, and starts the server.
+  Loads environment variables, connects to MongoDB, and starts the HTTP server.
 - `src/server.ts`  
-  Express app setup (middleware and routes).
+  Express application setup (middleware, CORS, routes).
 
 ### Routes
 | Prefix | Description |
 |------|-------------|
 | `/api/auth/*` | Authentication & user management |
-| `/api/resumes/*` | Resume upload & management |
+| `/api/resumes/*` | Resume upload, listing & details |
 | `/api/comments/*` | Resume comments |
 | `/api/admin/*` | Admin-only endpoints |
 
@@ -52,18 +64,23 @@ AI feedback generation runs **asynchronously via SQS**, handled by a background 
   - Generator: `src/features/feedback/services/AIFeedbackGenerator.ts`
   - Worker: `src/features/feedback/workers/sqsWorker.ts`
 
-### Persistence
-- MongoDB (Mongoose)
-- Models in `src/models`:
+### 🗄️Persistence
+- MongoDB via Mongoose
+- Core models:
   - `User`
   - `Resume`
   - `Comment`
   - `AIFeedback`
-
+ 
+### Resume AI Fields   
+- aiFeedback: string
+- aiStatus: "pending" | "done" | "failed"
+- aiError?: string
+  
 ### Storage
 - AWS S3 for resume files
-- CloudFront for public access
-- S3 object version listing & restore
+- CloudFront for public file access
+- S3 object version listing & restore support
 
 ### Logging & Errors
 - Winston logger (`src/helpers/logger.ts`)
@@ -129,10 +146,13 @@ Resume Upload Flow
 * { resumeId, extractedText } enqueued to SQS
 
 ## AI Feedback Worker
-* Polls SQS
+* Long-polls AWS SQS
 * Generates feedback via Gemini
-* Stores feedback in Resume.aiFeedback
-* Deletes message from SQS
+* Updates:
+  * Resume.aiFeedback
+  * Resume.aiStatus    
+* Deletes SQS message on success
+* Marks resume as failed on error (retry/DLQ ready)
 
 ## Versioning
 * GET /api/resumes/:id/versions
@@ -165,7 +185,8 @@ Restores a previous version and updates the CloudFront URL
 ### Versions
 * GET /api/resumes/:id/versions
 * POST /api/resumes/:id/restore/:versionId
-* Comments
+
+### Comments
 * POST /api/comments/add
 * GET /api/comments/:resumeId
 * PUT /api/comments/:commentId
