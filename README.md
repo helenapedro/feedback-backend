@@ -30,6 +30,8 @@ AI feedback generation is handled **asynchronously via AWS SQS**, processed by a
 
 ![Asynchronous Resume Processing Architecture](https://github.com/helenapedro/feedback-backend/blob/main/diagramas/AsynchronousResumeProcessingArchitecture.jpeg)
 
+This system is designed to decouple user-facing operations from AI-intensive processing to ensure responsiveness, scalability, and reliability. When a user uploads a resume, the Backend API stores the file in Amazon S3 and persists metadata in MongoDB, then publishes a message to Amazon SQS containing the resume identifier and extracted text. A dedicated background worker asynchronously consumes messages from the queue, invokes the Gemini AI API to generate structured feedback, and updates the resume record in MongoDB once processing is complete. Resume files are served to clients via Amazon CloudFront for efficient global delivery, while AI feedback and user comments are retrieved from the database through the API. This event-driven design prevents long-running AI tasks from blocking user requests and allows each component to scale independently.
+
 ## 🧱 Architecture Overview
 
 ### High-Level Flow
