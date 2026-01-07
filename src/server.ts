@@ -20,7 +20,8 @@ const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:8080',
   'https://resumefeedback.hmpedro.com',
-  'https://master.d1cehne8ow0dq0.amplifyapp.com'
+  'https://master.d1cehne8ow0dq0.amplifyapp.com',
+  'https://id-preview--5badb028-09f1-4253-99b9-1eda3b03112d.lovable.app'
 ];
 
 const corsOptions: cors.CorsOptions = {
