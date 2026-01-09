@@ -1,49 +1,54 @@
-import express from 'express';
-import { uploadResume } from '../../../controllers/uploadController';
-import * as resumeController from '../controllers/resumeController';
-import { listResumeVersions, restoreResumeVersion } from '../../../controllers/versionController';
-import { authMiddleware, AuthRequest } from '../../../middlewares/auth';
-import { upload } from '../../../services/s3Service';
-import logger from '../../../helpers/logger';
+import express from "express";
+import { uploadResume } from "../../../controllers/uploadController";
+import * as resumeController from "../controllers/resumeController";
+import { listResumeVersions, restoreResumeVersion } from "../../../controllers/versionController";
+import { authMiddleware, AuthRequest } from "../../../middlewares/auth";
+import { upload } from "../../../services/s3Service";
+import logger from "../../../helpers/logger";
 
 const router = express.Router();
 
+// Upload principal (file + SQS)
 router.post(
-  '/upload',
+  "/upload",
   authMiddleware,
-  upload.single('resume'),
+  upload.single("resume"),
   async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
     try {
       if (!req.file) {
-        logger.error('File upload failed: No file received');
-        res.status(400).json({ message: 'No file uploaded' });
-        return; 
+        logger.error("File upload failed: No file received");
+        res.status(400).json({ message: "No file uploaded" });
+        return;
       }
-
-      await uploadResume(req, res); 
+      await uploadResume(req, res);
     } catch (error) {
-      next(error); 
+      next(error);
     }
   }
 );
 
-router.get('/', authMiddleware, resumeController.getResume);
+// Latest resume of authenticated user
+router.get("/", authMiddleware, resumeController.getResume);
 
-router.get('/all', authMiddleware, resumeController.getAllResumes);
+router.get("/all", authMiddleware, resumeController.getAllResumes);
 
-router.get('/:id', authMiddleware, resumeController.getResumeDetails);
+router.get("/:id", authMiddleware, resumeController.getResumeDetails);
 
-router.get('/:id/versions', authMiddleware, 
+// versions for the current user 
+router.get(
+  "/versions",
+  authMiddleware,
   async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
-  try {
-    await listResumeVersions(req, res);
-  } catch (error) {
-    next(error);
+    try {
+      await listResumeVersions(req, res);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
-router.put('/', authMiddleware, upload.single('resume'), 
-  async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
+// ✅ Update metadata only (no file)
+router.put("/", authMiddleware, async (req: AuthRequest, res: express.Response, next: express.NextFunction) => {
   try {
     await resumeController.updateResume(req, res);
   } catch (error) {
@@ -52,7 +57,7 @@ router.put('/', authMiddleware, upload.single('resume'),
 });
 
 router.put(
-  '/update-description',
+  "/update-description",
   authMiddleware,
   async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
     try {
@@ -63,15 +68,18 @@ router.put(
   }
 );
 
-router.post('/:id/restore/:versionId', authMiddleware, 
+router.post(
+  "/restore/:versionId",
+  authMiddleware,
   async (req: AuthRequest, res: express.Response, next: express.NextFunction): Promise<void> => {
-  try {
-    await restoreResumeVersion(req, res);
-  } catch (error) {
-    next(error);
+    try {
+      await restoreResumeVersion(req, res);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
-router.delete('/', authMiddleware, resumeController.deleteResume);
+router.delete("/", authMiddleware, resumeController.deleteResume);
 
 export default router;

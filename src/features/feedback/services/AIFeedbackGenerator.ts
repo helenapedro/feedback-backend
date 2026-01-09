@@ -15,11 +15,27 @@ if (!geminiApiKey) {
 const genAI = new GoogleGenerativeAI(geminiApiKey);
 const model = genAI.getGenerativeModel({ model: geminiModelId });
 
-const buildPrompt = (extractedText: string): string => {
+const buildPrompt = (extractedText?: string): string => {
+  const hasText = typeof extractedText === "string" && extractedText.trim().length > 0;
+
   return `
 You are an experienced recruiter and ATS (Applicant Tracking System) specialist.
 
-Analyze the resume below and provide clear, structured, and actionable feedback.
+Your task is to analyze a resume and provide clear, structured, and actionable feedback.
+
+${hasText
+  ? `Resume content:
+${extractedText}`
+  : `
+IMPORTANT:
+The resume text could not be extracted or is empty.
+This may happen if the resume is scanned, image-based, or poorly formatted.
+In this case:
+- Do NOT assume missing information
+- Provide general resume best practices
+- Explain why text extraction may have failed
+- Suggest concrete steps to fix this (e.g., export as searchable PDF, avoid images, etc.)
+`}
 
 Please include:
 1. Strengths (bullet points)
@@ -28,19 +44,14 @@ Please include:
 4. ATS optimization tips (keywords, formatting, structure)
 5. A short "Next Steps" checklist (max 5 items)
 
-Resume content:
-${extractedText}
+Be professional, concise, and practical.
 `.trim();
 };
 
 export const generateAIFeedback = async (
   resumeId: string,
-  extractedText: string
+  extractedText?: string
 ): Promise<string> => {
-  if (!extractedText || !extractedText.trim()) {
-    throw new Error("No resume text provided for AI feedback.");
-  }
-
   try {
     const prompt = buildPrompt(extractedText);
 

@@ -1,8 +1,8 @@
-import { AuthRequest } from '../../../middlewares/auth';
-import { Request, Response } from 'express';
-import * as validation from '../../../helpers/validation';
-import * as resumeService from '../services/resumeService';
-import * as errorHandler from '../../../middlewares/errorHandler';
+import { AuthRequest } from "../../../middlewares/auth";
+import { Request, Response } from "express";
+import * as validation from "../../../helpers/validation";
+import * as resumeService from "../services/resumeService";
+import * as errorHandler from "../../../middlewares/errorHandler";
 
 export const getResume = async (req: AuthRequest, res: Response): Promise<void> => {
   if (!req.user || !req.user.userId) {
@@ -13,16 +13,16 @@ export const getResume = async (req: AuthRequest, res: Response): Promise<void> 
   const { userId } = req.user;
 
   try {
-    const resume = await resumeService.findResumesByUser(userId);
+    const resume = await resumeService.findLatestResumeByUser(userId);
 
-    if (!resume || resume.length === 0) {
-      errorHandler.handleNotFound(res, 'Resume not found');
+    if (!resume) {
+      errorHandler.handleNotFound(res, "Resume not found");
       return;
     }
 
-    res.status(200).json(resume[0]); 
+    res.status(200).json(resume);
   } catch (error) {
-    errorHandler.handleServerError(res, error, 'Error fetching resume');
+    errorHandler.handleServerError(res, error, "Error fetching resume");
   }
 };
 
@@ -34,7 +34,7 @@ export const getAllResumes = async (req: Request, res: Response): Promise<void> 
   try {
     const filters: any = {};
 
-    if (format) filters.format = { $regex: format, $options: 'i' };
+    if (format) filters.format = { $regex: format, $options: "i" };
 
     if (createdAt) {
       const date = new Date(createdAt as string);
@@ -53,7 +53,7 @@ export const getAllResumes = async (req: Request, res: Response): Promise<void> 
       resumes,
     });
   } catch (error) {
-    errorHandler.handleServerError(res, error, 'Error fetching resumes with filters');
+    errorHandler.handleServerError(res, error, "Error fetching resumes with filters");
   }
 };
 
@@ -69,13 +69,13 @@ export const getResumeDetails = async (req: AuthRequest, res: Response): Promise
     const resume = await resumeService.findResumeById(id);
 
     if (!resume) {
-      errorHandler.handleNotFound(res, 'Resume not found');
+      errorHandler.handleNotFound(res, "Resume not found");
       return;
     }
 
     res.status(200).json(resume);
   } catch (error) {
-    errorHandler.handleServerError(res, error, 'Error fetching resume details');
+    errorHandler.handleServerError(res, error, "Error fetching resume details");
   }
 };
 
@@ -90,37 +90,40 @@ export const updateResume = async (req: AuthRequest, res: Response): Promise<voi
   const { userId } = req.user;
 
   try {
-    let resume = await resumeService.findResumesByUser(userId);
-
-    if (!resume || resume.length === 0) {
-      const newResume = await resumeService.createResume(userId, format, description, req.file);
-      if (!newResume) {
-        res.status(500).json({ message: 'Failed to create resume' });
-        return;
-      }
-      res.status(201).json({ message: 'Resume created successfully', resume: newResume });
+    if (description && !validation.validateDescriptionLength(description)) {
+      errorHandler.handleInvalidInputError(res, "Description exceeds maximum length of 500 characters");
       return;
     }
 
-    if (description && !validation.validateDescriptionLength(description)) {
-      errorHandler.handleInvalidInputError(res, 'Description exceeds maximum length of 500 characters');
+    // ✅ If a file is provided, treat this as an upload/update and use upsert
+    if (req.file) {
+      const updated = await resumeService.upsertUserResume(userId, format, description, req.file);
+      res.status(200).json({ message: "Resume updated successfully", resume: updated });
+      return;
+    }
+
+    // ✅ If no file, just update metadata on the existing resume
+    const resume = await resumeService.findLatestResumeByUser(userId);
+    if (!resume) {
+      errorHandler.handleNotFound(res, "Resume not found");
       return;
     }
 
     const updatedResume = await resumeService.updateResumeData(
-      resume[0]._id.toString(),
+      resume._id.toString(),
       format,
       description,
-      req.file,
+      undefined
     );
+
     if (!updatedResume) {
-      res.status(500).json({ message: 'Failed to update resume' });
+      res.status(500).json({ message: "Failed to update resume" });
       return;
     }
 
-    res.status(200).json({ message: 'Resume updated successfully', resume: updatedResume });
+    res.status(200).json({ message: "Resume updated successfully", resume: updatedResume });
   } catch (error) {
-    errorHandler.handleServerError(res, error, 'Error updating resume');
+    errorHandler.handleServerError(res, error, "Error updating resume");
   }
 };
 
@@ -135,22 +138,28 @@ export const updateResumeDescription = async (req: AuthRequest, res: Response): 
   const { userId } = req.user;
 
   if (!description) {
-    errorHandler.handleInvalidInputError(res, 'Description is required');
+    errorHandler.handleInvalidInputError(res, "Description is required");
+    return;
+  }
+
+  if (!validation.validateDescriptionLength(description)) {
+    errorHandler.handleInvalidInputError(res, "Description exceeds maximum length of 500 characters");
     return;
   }
 
   try {
-    const resume = await resumeService.findResumesByUser(userId);
-    if (!resume || resume.length === 0) {
-      errorHandler.handleNotFound(res, 'Resume not found');
+    const resume = await resumeService.findLatestResumeByUser(userId);
+    if (!resume) {
+      errorHandler.handleNotFound(res, "Resume not found");
       return;
     }
 
-    resume[0].description = description;
-    await resume[0].save();
-    res.status(200).json({ message: 'Resume description updated successfully', resume: resume[0] });
+    resume.description = description;
+    await resume.save();
+
+    res.status(200).json({ message: "Resume description updated successfully", resume });
   } catch (error) {
-    errorHandler.handleServerError(res, error, 'Error updating resume description');
+    errorHandler.handleServerError(res, error, "Error updating resume description");
   }
 };
 
@@ -163,15 +172,15 @@ export const deleteResume = async (req: AuthRequest, res: Response): Promise<voi
   const { userId } = req.user;
 
   try {
-    const resume = await resumeService.findResumesByUser(userId);
-    if (!resume || resume.length === 0) {
-      errorHandler.handleNotFound(res, 'Resume not found');
+    const resume = await resumeService.findLatestResumeByUser(userId);
+    if (!resume) {
+      errorHandler.handleNotFound(res, "Resume not found");
       return;
     }
 
-    await resumeService.deleteResumeData(resume[0]._id.toString());
-    res.status(200).json({ message: 'Resume deleted successfully' });
+    await resumeService.deleteResumeData(resume._id.toString());
+    res.status(200).json({ message: "Resume deleted successfully" });
   } catch (error) {
-    errorHandler.handleServerError(res, error, 'Error deleting resume');
+    errorHandler.handleServerError(res, error, "Error deleting resume");
   }
 };

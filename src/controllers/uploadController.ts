@@ -1,11 +1,12 @@
 import { AuthRequest } from '../middlewares/auth';
 import { Response } from 'express';
 import { uploadToS3 } from '../services/s3Service';
-import Resume, {IResume} from '../models/Resume';
+import Resume, { IResume } from '../models/Resume';
 import pdfParse from 'pdf-parse';
 import logger from '../helpers/logger';
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import * as dotenv from 'dotenv';
+import path from 'path';
 dotenv.config();
 
 const sqsClient = new SQSClient({ region: process.env.AWS_REGION });
@@ -36,25 +37,38 @@ export const uploadResume = async (req: AuthRequest, res: Response): Promise<voi
   if (!allowedMimeTypes.includes(req.file.mimetype)) {
     res.status(400).json({ message: 'Invalid file type' });
     return;
-  } 
+  }
 
   try {
-    const fileUrl = await uploadToS3(req.file);
+    const ext = path.extname(req.file.originalname || '').toLowerCase()
+      || (req.file.mimetype === 'application/pdf' ? '.pdf'
+        : req.file.mimetype === 'image/png' ? '.png'
+        : '.jpg');
+
+    const s3Key = `resumes/${posterId}/resume${ext}`;
+
+    const uploadResult = await uploadToS3(req.file, s3Key);
 
     let extractedText = "";
 
     if (req.file.mimetype === 'application/pdf') {
       const pdfData = await pdfParse(req.file.buffer);
-      extractedText = pdfData.text;
+      extractedText = pdfData.text || "";
     }
 
-    const resume: IResume = await Resume.create({
-      posterId,
-      format,
-      url: fileUrl,
-      description,
-      aiFeedback: "", 
-    });
+    const resume: IResume = await Resume.findOneAndUpdate(
+      { posterId },
+      {
+        posterId,
+        format,
+        url: uploadResult.url,
+        s3Key: uploadResult.key,
+        currentVersionId: uploadResult.versionId ?? null,
+        description,
+        aiFeedback: "", // reset feedback so worker regenerates
+      },
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    ) as unknown as IResume;
 
     if (queueUrl) {
       const messageParams = {

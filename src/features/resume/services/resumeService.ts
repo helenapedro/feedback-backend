@@ -1,101 +1,118 @@
-import Resume, { IResume } from '../../../models/Resume';
-import { uploadToS3, deleteFromS3 } from '../../../services/s3Service';
-import path from 'path';
-import logger from '../../../helpers/logger';
+import Resume, { IResume } from "../../../models/Resume";
+import { uploadToS3, deleteFromS3 } from "../../../services/s3Service";
+import path from "path";
+import logger from "../../../helpers/logger";
 
 export const findResumeById = async (id: string) => {
-  return Resume.findById(id).populate('posterId', '-password');
+  return Resume.findById(id).populate("posterId", "-password");
+};
+
+export const findLatestResumeByUser = async (userId: string) => {
+  return Resume.findOne({ posterId: userId }).populate("posterId", "-password");
 };
 
 export const findResumesByUser = async (userId: string) => {
-  return Resume.find({ posterId: userId }).populate('posterId', '-password');
+  return Resume.find({ posterId: userId }).populate("posterId", "-password");
 };
 
 export const findResumesWithFilters = async (filters: any, page: number, limit: number) => {
   return Resume.find(filters)
-    .sort({ createdAt: -1 })
+    .sort({ updatedAt: -1 })
     .skip((page - 1) * limit)
     .limit(limit)
-    .populate('posterId', '-password');
+    .populate("posterId", "-password");
 };
 
 export const countResumesWithFilters = async (filters: any) => {
   return Resume.countDocuments(filters);
 };
 
-export const createResume = async (userId: string, format?: string, description?: string, file?: Express.Multer.File) => {
+// Helper: deterministic key per user
+const buildUserResumeKey = (userId: string, file: Express.Multer.File, format?: string) => {
+  const extFromFile = path.extname(file.originalname || "").toLowerCase();
+  const ext =
+    extFromFile ||
+    (file.mimetype === "application/pdf" || format === "pdf" ? ".pdf"
+      : file.mimetype === "image/png" || format === "png" ? ".png"
+      : ".jpg");
+
+  return `resumes/${userId}/resume${ext}`;
+};
+
+export const upsertUserResume = async (
+  userId: string,
+  format?: string,
+  description?: string,
+  file?: Express.Multer.File
+) => {
   try {
-    let s3Key: string | null = null;
-    let fileUrl: string | null = null;
-    if (file) {
-      const ext = path.extname(file.originalname);
-      const baseKey = `resume_${Date.now()}_${userId}${ext}`; 
-      const uploadedUrl = await uploadToS3(file, baseKey);
-      fileUrl = uploadedUrl || null;
-      s3Key = fileUrl ? new URL(fileUrl).pathname.substring(1) : null; 
-      if (!fileUrl || !s3Key) {
-        logger.error('File upload failed: No URL or S3 key received');
-        throw new Error('File upload failed');
-      }
+    if (!file) {
+      throw new Error("File is required to upload a resume");
     }
 
-    const resume = await Resume.create({
-      posterId: userId,
-      format: format,
-      url: fileUrl || undefined,
-      s3Key: s3Key || undefined, 
-      description: description,
-    });
+    const s3Key = buildUserResumeKey(userId, file, format);
+    const uploadResult = await uploadToS3(file, s3Key); 
+
+    const resume = await Resume.findOneAndUpdate(
+      { posterId: userId },
+      {
+        posterId: userId,
+        format,
+        description,
+        url: uploadResult.url,
+        s3Key: uploadResult.key,
+        currentVersionId: uploadResult.versionId ?? null,
+        aiFeedback: "", // reset; worker regenerates
+      },
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    );
+
     return resume;
   } catch (error) {
-    logger.error('Error creating resume: ', error);
+    logger.error("Error upserting resume: ", error);
     throw error;
   }
 };
 
-export const updateResumeData = async (id: string, format?: string, description?: string, file?: Express.Multer.File) => {
+export const updateResumeData = async (
+  id: string,
+  format?: string,
+  description?: string,
+  file?: Express.Multer.File
+) => {
   try {
     const resume = await Resume.findById(id);
-    if (!resume) {
-      return null;
-    }
-
-    let newS3Key: string | null = null;
-    let newFileUrl: string | null = null;
+    if (!resume) return null;
 
     if (file) {
-      const ext = path.extname(file.originalname);
-      const baseKey = resume.s3Key || `resume_${Date.now()}_${resume.posterId}${ext}`;
-      const uploadedUrl = await uploadToS3(file, baseKey);
-      newFileUrl = uploadedUrl || null;
-      newS3Key = newFileUrl ? new URL(newFileUrl).pathname.substring(1) : null;
+      const key = resume.s3Key || buildUserResumeKey(String(resume.posterId), file, format);
+      const uploadResult = await uploadToS3(file, key);
 
-      if (newFileUrl) {
-        resume.url = `${newFileUrl}?t=${Date.now()}`; 
-        resume.s3Key = newS3Key;
-      } else {
-        throw new Error('File upload failed');
-      }
+      resume.url = uploadResult.url;
+      resume.s3Key = uploadResult.key;
+      resume.currentVersionId = uploadResult.versionId ?? null;
+
+      // Whenever a new file is uploaded, feedback should be regenerated
+      resume.aiFeedback = "";
     }
 
     if (format) resume.format = format;
-    if (description) resume.description = description;
+    if (typeof description === "string") resume.description = description;
 
     return resume.save();
   } catch (error) {
-    logger.error('Error updating resume data: ', error);
+    logger.error("Error updating resume data: ", error);
     throw error;
   }
 };
 
 export const deleteResumeData = async (id: string) => {
   const resume = await Resume.findById(id);
-  if (!resume) {
-    return null;
-  }
+  if (!resume) return null;
 
   if (resume.url) {
-    await deleteFromS3(resume.url.split('?')[0]); 
+    await deleteFromS3(resume.url.split("?")[0]);
   }
+
   return Resume.findByIdAndDelete(id);
 };
